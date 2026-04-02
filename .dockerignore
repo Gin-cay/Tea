@@ -1,4 +1,10 @@
 .git
+**/__pycache__
+**/*.py[cod]
+**/.venv
+**/venv
+**/.env
+backend/*.db
 miniprogram
 cloudfunctions
 *.md

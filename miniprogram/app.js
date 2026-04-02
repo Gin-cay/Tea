@@ -1,5 +1,19 @@
+const { envList, cloudApiBaseUrl } = require("./envList");
+
+const resolvedApiBaseUrl =
+  cloudApiBaseUrl && String(cloudApiBaseUrl).trim().length > 0
+    ? String(cloudApiBaseUrl).trim().replace(/\/$/, "")
+    : "http://127.0.0.1:5000";
+
 App({
-  onLaunch() {},
+  onLaunch() {
+    if (envList && envList.length > 0 && envList[0].envId) {
+      wx.cloud.init({
+        env: envList[0].envId,
+        traceUser: true
+      });
+    }
+  },
   /**
    * 检查资料是否完整（不直接跳转）
    */
@@ -32,7 +46,7 @@ App({
   globalData: {
     userInfo: null,
     sessionStorageKey: "tea_adopt_user",
-    apiBaseUrl: "http://127.0.0.1:5000",
+    apiBaseUrl: resolvedApiBaseUrl,
     /** 溯源令牌签名密钥：务必改为服务端保管，与验签接口一致 */
     traceTokenSecret: "TEA_RED_TRACE_DEV_SECRET_REPLACE"
   }
