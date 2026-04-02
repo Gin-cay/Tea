@@ -1,3 +1,5 @@
 flask==3.1.0
 flask-sqlalchemy==3.1.1
 gunicorn==23.0.0
+# Cloud DATABASE_URL 使用 mysql+pymysql:// 时需要
+pymysql==1.1.1
