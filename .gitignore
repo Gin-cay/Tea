@@ -14,6 +14,9 @@ venv/
 .env
 .env.*
 
+# SQLite（本地 / 容器内数据库文件勿提交）
+*.db
+
 # Node (云函数等若后续 npm install)
 node_modules/
 

@@ -28,14 +28,31 @@ python server.py
 
 将小程序 `miniprogram/envList.js` 中 `cloudApiBaseUrl` 设为云托管 HTTPS 根地址（无末尾 `/`）；留空则仍为本地 `http://127.0.0.1:5000`。并在微信公众平台配置 **request 合法域名**。
 
-## 4) 接口列表
+## 4) 环境变量（云托管）
+
+| 变量 | 说明 |
+|------|------|
+| `WECHAT_APPID` / `WECHAT_SECRET` | `POST /api/auth/wechat` 换 openid，**必填**（与小程序 AppID 一致） |
+| `DATABASE_URL` | 可选；默认 SQLite 文件 `tea_data.db`（容器无持久盘时社区数据会丢，生产建议接云数据库） |
+| `PUBLIC_BASE_URL` | 可选；社区上传返回的图片 URL 前缀（HTTPS 根地址） |
+| `COMMUNITY_AUTO_APPROVE` | 可选；默认 `true`，发帖自动通过审核 |
+| `PORT` | 监听端口，与云托管容器端口一致 |
+
+## 5) 接口列表
+
+**公益**
 
 - `GET /health`
 - `GET /public-benefit/milestones`
 - `GET /public-benefit/records/{recordId}`
 - `POST /points/redeem`
 
-## 5) 说明
+**微信与茶友社区**（小程序 `communityHttp.js` 依赖）
 
-- 当前数据为内存 mock，重启服务会重置积分余额。
-- 可通过请求头 `X-User-Id` 区分用户积分（默认 `u-demo`）。
+- `POST /api/auth/wechat`
+- `GET/POST /api/community/*`（feed、posts、like、comments、notify、upload 等）
+
+## 6) 说明
+
+- 公益积分仍为内存 mock，重启会重置；社区帖子等在数据库中持久化（视 `DATABASE_URL` 与磁盘而定）。
+- 可通过请求头 `X-User-Id` 区分公益积分用户（默认 `u-demo`）；社区接口使用 `X-Openid`。

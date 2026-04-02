@@ -1,8 +1,31 @@
+import json
 import os
+import urllib.parse
+import urllib.request
 from copy import deepcopy
 
 from flask import Flask, jsonify, request
 
+_app_dir = os.path.dirname(os.path.abspath(__file__))
+_app = Flask(__name__)
+_app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+    "DATABASE_URL", "sqlite:///" + os.path.join(_app_dir, "tea_data.db")
+)
+_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+from extensions import db  # noqa: E402
+
+db.init_app(_app)
+
+import models_community  # noqa: E402,F401  # registers ORM tables
+
+from community_routes import community_bp, register_upload_static  # noqa: E402
+
+_app.register_blueprint(community_bp)
+register_upload_static(_app)
+
+with _app.app_context():
+    db.create_all()
 
 MOCK_OVERVIEW = {
     "summary": {
@@ -94,19 +117,58 @@ MOCK_RECORDS = {
 
 USER_POINTS = {"u-demo": 860}
 
-app = Flask(__name__)
+app = _app
 
 
 @app.after_request
 def add_cors_headers(resp):
     resp.headers["Access-Control-Allow-Origin"] = "*"
     resp.headers["Access-Control-Allow-Methods"] = "GET,POST,OPTIONS"
-    resp.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization,X-User-Id"
+    resp.headers["Access-Control-Allow-Headers"] = (
+        "Content-Type,Authorization,X-User-Id,X-Openid,X-Open-Id"
+    )
     return resp
 
 
 def user_id():
     return request.headers.get("X-User-Id") or "u-demo"
+
+
+@app.route("/api/auth/wechat", methods=["POST", "OPTIONS"])
+def wechat_code2session():
+    if request.method == "OPTIONS":
+        return "", 204
+    body = request.get_json(silent=True) or {}
+    code = body.get("code")
+    if not code:
+        return jsonify({"error": "missing code"}), 400
+    appid = os.getenv("WECHAT_APPID", "")
+    secret = os.getenv("WECHAT_SECRET", "")
+    if not appid or not secret:
+        return jsonify(
+            {"error": "服务端未配置 WECHAT_APPID / WECHAT_SECRET，无法换 openid"}
+        ), 503
+    q = urllib.parse.urlencode(
+        {
+            "appid": appid,
+            "secret": secret,
+            "js_code": code,
+            "grant_type": "authorization_code",
+        }
+    )
+    url = f"https://api.weixin.qq.com/sns/jscode2session?{q}"
+    try:
+        with urllib.request.urlopen(url, timeout=10) as resp:
+            raw = resp.read().decode("utf-8")
+        data = json.loads(raw)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 502
+    if data.get("errcode"):
+        return jsonify({"error": data.get("errmsg", "wechat error"), "detail": data}), 400
+    openid = data.get("openid")
+    if not openid:
+        return jsonify({"error": "no openid in response", "detail": data}), 502
+    return jsonify({"openid": openid, "session_key": data.get("session_key", "")})
 
 
 @app.route("/health", methods=["GET", "OPTIONS"])
