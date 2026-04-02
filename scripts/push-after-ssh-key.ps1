@@ -1,7 +1,6 @@
-# 使用说明：请先在 GitHub 添加本机公钥后再运行本脚本。
-# 公钥文件：%USERPROFILE%\.ssh\id_ed25519.pub
-# 添加地址：https://github.com/settings/ssh/new
+# Add your public key to GitHub first: https://github.com/settings/ssh/new
+# Public key file: $env:USERPROFILE\.ssh\id_ed25519.pub
 $ErrorActionPreference = "Stop"
 Set-Location (Join-Path $PSScriptRoot "..")
 git push origin main
-Write-Host "若成功，请到微信云托管用本仓库重新构建发布后端镜像。"
+Write-Host "Done. If push succeeded, rebuild and deploy the backend on WeChat Cloud Run from this repo."
