@@ -1,0 +1,66 @@
+<page-background>
+<view class="page">
+  <!-- 顶部红色文化视觉标识条 -->
+  <view class="red-hero">
+    <view class="red-hero-badge">红色茶源 · 可信溯源</view>
+    <view class="red-hero-title">茶地认养 × 红色溯源</view>
+    <view class="red-hero-sub muted">一码贯通：认养权益 · 红色故事 · 研学打卡</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">我的溯源码</view>
+    <view class="muted hint" wx:if="{{!recordCount}}">完成茶园认养并支付成功后，将自动生成「红色茶源溯源码」。</view>
+    <view class="stat-row" wx:else>
+      <text>已生成 {{recordCount}} 枚溯源码</text>
+      <button class="btn-inline" bindtap="goLatestCode">查看最近一枚</button>
+    </view>
+    <button class="btn-scan" bindtap="onScanTrace">
+      <text class="scan-icon">◎</text>
+      扫描他人溯源码
+    </button>
+  </view>
+
+  <view class="card">
+    <view class="section-title">快捷服务</view>
+    <view class="quick-grid">
+      <view class="quick-item quick-item--red" bindtap="goStudy">
+        <text class="quick-icon">旗</text>
+        <text class="quick-name">红色茶旅研学</text>
+        <text class="quick-desc muted">路线 · 预约 · 积分兑换</text>
+      </view>
+      <view class="quick-item" bindtap="goCheckin">
+        <text class="quick-icon">卡</text>
+        <text class="quick-name">线下打卡</text>
+        <text class="quick-desc muted">扫码景点 · 勋章积分</text>
+      </view>
+      <view class="quick-item" bindtap="goCertListHint">
+        <text class="quick-icon">证</text>
+        <text class="quick-name">电子证书</text>
+        <text class="quick-desc muted">分享 · 保存相册</text>
+      </view>
+    </view>
+    <view class="points-bar muted">当前研学积分：<text class="points-num">{{points}}</text>（打卡/活动获取，可兑研学名额）</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">红色内容精选</view>
+    <view class="muted hint">按茶园进入多媒体故事（后台可维护图文/音频/视频）。</view>
+    <view class="link-row" data-id="1" bindtap="goStory">
+      <text>半亩塘茶园 · 红色与绿色叙事</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="link-row" data-id="2" bindtap="goStory">
+      <text>云雾山有机红茶 · 闽北印记</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="link-row" data-id="3" bindtap="goStory">
+      <text>共富茶园 · 田间党课实践</text>
+      <text class="arrow">›</text>
+    </view>
+  </view>
+
+  <view class="card admin-hint muted">
+    管理端接口预留：故事 / 茶农 / 研学路线 → 见 utils/redTraceMockData.ADMIN_API_STUB
+  </view>
+</view>
+</page-background>

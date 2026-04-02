@@ -1,0 +1,48 @@
+<page-background>
+  <view class="page">
+    <view class="card">
+      <view class="section-title">登录 / 注册</view>
+      <view class="muted sub">首次使用需完善资料，提交后将按身份进入对应首页。</view>
+    </view>
+
+    <view class="card">
+      <view class="label">身份选择</view>
+      <view class="role-row">
+        <view class="role-chip {{role === 'customer' ? 'role-chip--active' : ''}}" bindtap="onRoleTap" data-role="customer">
+          顾客
+        </view>
+        <view class="role-chip {{role === 'farmer' ? 'role-chip--active' : ''}}" bindtap="onRoleTap" data-role="farmer">
+          茶农
+        </view>
+      </view>
+
+      <view class="label mt">头像（必传）</view>
+      <view class="avatar-row">
+        <image class="avatar" src="{{avatarUrl || '/images/background.png'}}" mode="aspectFill"></image>
+        <view class="avatar-actions">
+          <button class="ghost-btn" bindtap="onChooseAvatarAlbum">相册选择</button>
+          <button class="ghost-btn" bindtap="onChooseAvatarCamera">拍照上传</button>
+        </view>
+      </view>
+      <view class="muted hint">提示：演示版头像使用本地临时路径；正式版请上传到云存储。</view>
+
+      <view class="label mt">手机号（必填）</view>
+      <input class="input" type="number" maxlength="11" placeholder="请输入 11 位手机号" value="{{phone}}" bindinput="onPhoneInput" />
+
+      <view class="label mt">用户昵称（必填）</view>
+      <input class="input" maxlength="20" placeholder="请输入昵称" value="{{nickname}}" bindinput="onNicknameInput" />
+
+      <view class="label mt">收货地址（必填）</view>
+      <picker mode="region" value="{{region}}" bindchange="onRegionChange">
+        <view class="picker">
+          <text class="{{regionText ? '' : 'placeholder'}}">{{regionText || '请选择省市区'}}</text>
+          <text class="arrow">›</text>
+        </view>
+      </picker>
+      <input class="input" maxlength="60" placeholder="详细地址（街道/门牌号）" value="{{addressDetail}}" bindinput="onAddressDetailInput" />
+
+      <button class="primary-btn mt2" bindtap="onSubmit">提交并进入</button>
+    </view>
+  </view>
+</page-background>
+

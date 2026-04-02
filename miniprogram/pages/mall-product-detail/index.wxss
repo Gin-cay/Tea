@@ -1,0 +1,61 @@
+.cover {
+  width: 100%;
+  height: 360rpx;
+  display: block;
+  border-radius: 0 0 24rpx 24rpx;
+}
+
+.red-selling {
+  border: 2rpx solid rgba(201, 48, 44, 0.2);
+  background: linear-gradient(180deg, #fff8f8 0%, #ffffff 100%);
+}
+
+.red-selling-tag {
+  display: inline-block;
+  font-size: 22rpx;
+  color: #fff;
+  background: #c9302c;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+  margin-bottom: 12rpx;
+}
+
+.red-selling-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.45;
+  margin-bottom: 10rpx;
+}
+
+.btn-outline-red {
+  margin: 20rpx 0 0;
+  font-size: 26rpx;
+  color: #c9302c;
+  background: rgba(201, 48, 44, 0.08);
+  border-radius: 999rpx;
+  border: none;
+}
+
+.btn-outline-red::after {
+  border: none;
+}
+
+.detail-name {
+  font-size: 34rpx;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.para {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  line-height: 1.55;
+}
+
+.price {
+  margin-top: 12rpx;
+  font-size: 36rpx;
+  color: #e1583f;
+  font-weight: 600;
+}

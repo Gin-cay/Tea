@@ -1,0 +1,93 @@
+.code-hero {
+  text-align: center;
+  padding: 24rpx 16rpx 8rpx;
+}
+
+.code-hero-tag {
+  display: inline-block;
+  font-size: 22rpx;
+  color: #fff;
+  background: #c9302c;
+  padding: 6rpx 20rpx;
+  border-radius: 999rpx;
+  margin-bottom: 12rpx;
+}
+
+.code-hero-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8rpx;
+}
+
+.small {
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.qr-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 32rpx;
+  padding-bottom: 32rpx;
+}
+
+.qr-canvas {
+  width: 400rpx;
+  height: 400rpx;
+  background: #fff;
+  border-radius: 16rpx;
+}
+
+.token-box {
+  margin-top: 20rpx;
+  text-align: center;
+  padding: 0 16rpx;
+}
+
+.token-text {
+  font-size: 20rpx;
+  color: #9ca3af;
+  word-break: break-all;
+  padding: 12rpx 24rpx 0;
+  text-align: center;
+}
+
+.para {
+  font-size: 26rpx;
+  line-height: 1.55;
+  margin-bottom: 12rpx;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.btn-main {
+  margin: 0;
+  background: linear-gradient(90deg, #c9302c, #e85d5d);
+  color: #fff;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.btn-main::after {
+  border: none;
+}
+
+.btn-ghost {
+  margin: 0;
+  background: #edf7ec;
+  color: #2f8f3a;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.btn-ghost::after {
+  border: none;
+}

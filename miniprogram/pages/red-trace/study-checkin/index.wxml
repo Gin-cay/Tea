@@ -1,0 +1,36 @@
+<page-background>
+<view class="page">
+  <view class="check-hero">
+    <text class="check-hero-icon">卡</text>
+    <view>
+      <view class="check-hero-title">红色景点打卡</view>
+      <view class="muted small">扫描景点物料二维码，或手动输入打卡口令</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <button class="btn-scan-big" bindtap="onScan">扫一扫打卡</button>
+    <view class="or muted">或</view>
+    <input
+      class="code-input"
+      placeholder="输入打卡口令，如 CHK-XH-001"
+      value="{{manualCode}}"
+      bindinput="onInputCode"
+    />
+    <button class="btn-submit" bindtap="onManualSubmit">提交口令</button>
+  </view>
+
+  <view class="card">
+    <view class="section-title">我的勋章</view>
+    <view wx:if="{{!medals.length}}" class="muted">尚未解锁，完成首次打卡可获得「红色茶旅先锋」勋章。</view>
+    <view class="medal-row" wx:for="{{medals}}" wx:key="*this">
+      <text class="medal-icon">★</text>
+      <text>{{item}}</text>
+    </view>
+  </view>
+
+  <view class="card muted small">
+    已打卡景点数：{{checkinCount}} · 累计获得积分以研学页为准
+  </view>
+</view>
+</page-background>

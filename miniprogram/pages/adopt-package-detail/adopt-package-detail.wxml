@@ -1,0 +1,44 @@
+<page-background>
+<view class="pkg-shell" wx:if="{{pkg}}">
+  <scroll-view class="pkg-scroll" scroll-y>
+    <view class="pkg-body">
+      <image class="pkg-cover" src="{{pkg.cover}}" mode="aspectFill" />
+      <view class="card pkg-head">
+        <view class="pkg-name">{{pkg.name}}</view>
+        <view class="pkg-sub">{{pkg.subtitle}}</view>
+        <view class="pkg-price-row">
+          <text class="pkg-price">¥{{pkg.price}}</text>
+          <text class="pkg-price-note">{{pkg.priceNote}}</text>
+        </view>
+        <view class="pkg-period">
+          <text class="pkg-period-label">{{pkg.periodLabel}}</text>
+          <text class="pkg-period-val">{{pkg.period}}</text>
+        </view>
+      </view>
+
+      <view class="card pkg-block">
+        <view class="block-h">套餐说明</view>
+        <text class="block-p">{{pkg.intro}}</text>
+      </view>
+
+      <view class="card pkg-block">
+        <view class="block-h">套餐权益</view>
+        <view class="benefit-row" wx:for="{{pkg.benefits}}" wx:key="*this">
+          <text class="benefit-ico">✓</text>
+          <text class="benefit-txt">{{item}}</text>
+        </view>
+      </view>
+
+      <view class="pkg-spacer"></view>
+    </view>
+  </scroll-view>
+
+  <view class="pkg-footer safe-area">
+    <button class="pkg-btn" bindtap="onTapAdopt">立即认养</button>
+  </view>
+</view>
+
+<view class="pkg-empty" wx:else>
+  <view class="card">套餐不存在</view>
+</view>
+</page-background>

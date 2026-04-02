@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "红色茶旅研学",
+  "usingComponents": {
+    "page-background": "/components/page-background/index"
+  }
+}

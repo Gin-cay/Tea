@@ -1,0 +1,60 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/tea-story-list/index",
+    "pages/red-tea-story-list/index",
+    "pages/story-detail/index",
+    "pages/red-trace/hub/index",
+    "pages/red-trace/trace-code/index",
+    "pages/red-trace/trace-view/index",
+    "pages/red-trace/story-rich/index",
+    "pages/red-trace/certificate/index",
+    "pages/public-benefit/milestone/index",
+    "pages/red-trace/study-tour/index",
+    "pages/red-trace/study-checkin/index",
+    "pages/mall-product-detail/index",
+    "pages/adopt/adopt",
+    "pages/real-care/upload/index",
+    "pages/auth/profile/index",
+    "pages/farmer/index",
+    "pages/adopt-package-detail/adopt-package-detail",
+    "pages/adopt-list/adopt-list",
+    "pages/adopt-detail/adopt-detail",
+    "pages/adopt-order/adopt-order",
+    "pages/mall/index",
+    "pages/mine/index"
+  ],
+  "window": {
+    "backgroundColor": "#f5f7f2",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "茶叶助农",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#8b8b8b",
+    "selectedColor": "#2f8f3a",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/adopt/adopt",
+        "text": "认养"
+      },
+      {
+        "pagePath": "pages/mall/index",
+        "text": "商城"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

@@ -1,7 +1,21 @@
+# OS / IDE
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+
+# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
 .venv/
 venv/
 .env
-*.log
+.env.*
+
+# Node (云函数等若后续 npm install)
+node_modules/
+
+# 微信开发者工具
+**/miniprogram_npm/

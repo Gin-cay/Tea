@@ -1,0 +1,107 @@
+<page-background>
+<view class="page">
+  <swiper class="banner" indicator-dots autoplay interval="3500" circular>
+    <block wx:for="{{banners}}" wx:key="id">
+      <swiper-item>
+        <view class="banner-item">
+          <image class="banner-img" src="{{item.image}}" mode="aspectFill" />
+          <text class="banner-title">{{item.title}}</text>
+        </view>
+      </swiper-item>
+    </block>
+  </swiper>
+
+  <view class="card">
+    <view class="section-title">茶叶分类</view>
+    <view class="category-grid">
+      <block wx:for="{{categories}}" wx:key="id">
+        <view class="category-item">{{item.name}}</view>
+      </block>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">热门商品</view>
+    <block wx:for="{{hotItems}}" wx:key="id">
+      <view class="row">
+        <view>
+          <view class="item-title">{{item.name}}</view>
+          <view class="muted">{{item.desc}}</view>
+        </view>
+        <view class="price">¥{{item.price}}</view>
+      </view>
+    </block>
+  </view>
+
+  <view class="card">
+    <view class="section-title">热门茶园</view>
+    <block wx:for="{{gardens}}" wx:key="id">
+      <view class="row">
+        <text>{{item.name}}</text>
+        <text class="tag">{{item.status}}</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 茶韵红史：热门茶园下方、底部 tab 栏上方；双卡片 + 内嵌故事入口 -->
+  <view class="card">
+    <view class="section-title">茶韵红史</view>
+    <!-- 红色溯源独立入口：与认养链路联动 -->
+    <view class="red-trace-entry" bindtap="goRedTraceHub">
+      <view class="red-trace-entry-badge">溯源</view>
+      <view class="red-trace-entry-body">
+        <text class="red-trace-entry-title">红色溯源</text>
+        <text class="red-trace-entry-desc muted">认养溯源码 · 红色故事 · 研学打卡 · 电子证书</text>
+      </view>
+      <text class="red-trace-entry-arrow">›</text>
+    </view>
+    <view class="tea-history-row">
+      <!-- 茶叶故事卡片：头部进列表，子项进详情（catchtap 避免冒泡触发头部） -->
+      <view class="tea-history-card">
+        <view class="tea-history-card-head" bindtap="goTeaStoryList">
+          <image class="tea-history-icon" src="/images/icons/tea-leaf.svg" mode="aspectFit" aria-hidden="true" />
+          <view class="tea-history-card-head-text">
+            <text class="tea-history-card-title">茶叶故事</text>
+            <text class="tea-history-card-sub">探寻千年茶韵，品味制茶匠心</text>
+          </view>
+        </view>
+        <view class="tea-history-mini-list">
+          <view
+            wx:for="{{teaStorySamples}}"
+            wx:key="id"
+            class="tea-history-mini-item"
+            data-type="tea"
+            data-id="{{item.id}}"
+            catchtap="goStoryDetail"
+          >
+            <text class="tea-history-mini-title">{{item.title}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 红色茶源卡片 -->
+      <view class="tea-history-card tea-history-card--red">
+        <view class="tea-history-card-head" bindtap="goRedTeaStoryList">
+          <image class="tea-history-icon" src="/images/icons/red-landmark.svg" mode="aspectFit" aria-hidden="true" />
+          <view class="tea-history-card-head-text">
+            <text class="tea-history-card-title">红色茶源</text>
+            <text class="tea-history-card-sub">追溯红色茶乡，传承革命精神</text>
+          </view>
+        </view>
+        <view class="tea-history-mini-list">
+          <view
+            wx:for="{{redStorySamples}}"
+            wx:key="id"
+            class="tea-history-mini-item"
+            data-type="red"
+            data-id="{{item.id}}"
+            catchtap="goStoryDetail"
+          >
+            <text class="tea-history-mini-title">{{item.title}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+</page-background>

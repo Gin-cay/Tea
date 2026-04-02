@@ -1,0 +1,70 @@
+<page-background>
+<view class="list-page">
+  <view class="top-banner">
+    <text class="banner-text">助力乡村振兴！共富茶园经济</text>
+  </view>
+
+  <scroll-view class="cat-scroll" scroll-x>
+    <view class="cat-row">
+      <view
+        wx:for="{{categories}}"
+        wx:key="*this"
+        class="cat-chip {{activeCategory === item ? 'cat-chip--on' : ''}}"
+        data-name="{{item}}"
+        bindtap="onTapCategory"
+      >
+        {{item}}
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="sort-bar">
+    <text
+      wx:for="{{sorts}}"
+      wx:key="*this"
+      class="sort-item {{activeSort === item ? 'sort-item--on' : ''}}"
+      data-name="{{item}}"
+      bindtap="onTapSort"
+    >
+      {{item}}
+    </text>
+  </view>
+
+  <view class="list-wrap">
+    <block wx:for="{{list}}" wx:key="id">
+      <view class="goods-card">
+        <image class="goods-cover" src="{{item.cover}}" mode="aspectFill" />
+        <view class="goods-main">
+          <view class="goods-name-row">
+            <view class="goods-name">{{item.name}}</view>
+            <text class="goods-red-tag">红色溯源</text>
+          </view>
+          <view class="goods-cycle">{{item.cycleLabel}}</view>
+          <view class="progress-line">
+            <view class="progress-track">
+              <view class="progress-fill" style="width: {{item.progress}}%;"></view>
+            </view>
+            <text class="progress-txt">进度 {{item.progress}}%</text>
+          </view>
+          <view class="goods-meta">
+            品种：{{item.variety}}　周期：{{item.period}}　产量：{{item.yield}}
+          </view>
+          <view class="goods-foot">
+            <view class="goods-price-block">
+              <text class="goods-price">¥{{item.price}}</text>
+              <text class="goods-join">{{item.joinCount}} 人已参与</text>
+            </view>
+            <button
+              class="btn-join"
+              data-id="{{item.id}}"
+              bindtap="onTapEnroll"
+            >
+              立即报名
+            </button>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+</page-background>

@@ -1,0 +1,41 @@
+<page-background>
+<view class="page">
+  <!-- 登录/完善资料入口：点击头像区域进入 -->
+  <view class="card profile" bindtap="goProfile">
+    <image class="avatar-img" src="{{user.avatarUrl || ''}}" mode="aspectFill" wx:if="{{user.avatarUrl}}"></image>
+    <view class="avatar" wx:else></view>
+    <view class="user-info">
+      <view class="name">{{user.nickname}}</view>
+      <view class="muted">{{user.level}}</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">订单中心</view>
+    <view class="order-grid">
+      <view class="order-item">待付款</view>
+      <view class="order-item">待发货</view>
+      <view class="order-item">待收货</view>
+      <view class="order-item">售后</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">功能入口</view>
+    <block wx:for="{{menuList}}" wx:key="title">
+      <view
+        class="menu-item"
+        bindtap="onMenuTap"
+        data-url="{{item.url}}"
+        data-needcert="{{item.needCert}}"
+      >
+        <view class="menu-row">
+          <text wx:if="{{item.badge}}" class="menu-red-tag">{{item.badge}}</text>
+          <text>{{item.title}}</text>
+        </view>
+        <text class="muted">></text>
+      </view>
+    </block>
+  </view>
+</view>
+</page-background>

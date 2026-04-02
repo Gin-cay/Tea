@@ -1,0 +1,37 @@
+<page-background>
+<view class="order-page" wx:if="{{goods}}">
+  <view class="card order-card">
+    <view class="order-label">{{orderLabel}}</view>
+    <view class="order-goods">
+      <image class="order-cover" src="{{goods.cover}}" mode="aspectFill" />
+      <view class="order-info">
+        <view class="order-name">{{goods.name}}</view>
+        <view class="order-cycle">{{goods.cycleLabel}}</view>
+        <view class="order-period">履约周期：{{goods.period}}</view>
+      </view>
+    </view>
+    <view class="order-row">
+      <text>认养价款</text>
+      <text class="order-price">¥{{goods.price}}</text>
+    </view>
+  </view>
+
+  <view class="card order-tip">
+    <text>提交订单即表示同意认养协议；支付成功后可在「我的-订单」查看履约进度。</text>
+  </view>
+
+  <view class="order-spacer"></view>
+
+  <view class="order-bar safe-bottom">
+    <view class="order-total">
+      <text class="order-total-label">应付</text>
+      <text class="order-total-price">¥{{goods.price}}</text>
+    </view>
+    <button class="btn-pay" bindtap="onTapPay">微信支付</button>
+  </view>
+</view>
+
+<view class="order-empty" wx:else>
+  <view class="card">订单信息无效</view>
+</view>
+</page-background>

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "红色茶源",
+  "usingComponents": {
+    "page-background": "/components/page-background/index"
+  }
+}

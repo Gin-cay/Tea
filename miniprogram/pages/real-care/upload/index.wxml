@@ -1,0 +1,85 @@
+<page-background>
+  <view class="page">
+    <view class="card">
+      <view class="head-row">
+        <view class="section-title">实时照看 · 上传</view>
+        <view class="badge">{{treeId}}</view>
+      </view>
+      <view class="muted sub">为认养茶树上传实时照片，并同步填写养护日记。</view>
+    </view>
+
+    <!-- 非茶农角色提示（演示：角色来自本地 storage；正式接入登录鉴权） -->
+    <view class="card" wx:if="{{role !== 'farmer'}}">
+      <view class="section-title">暂无权限</view>
+      <view class="muted sub">当前账号不是茶农端，无法上传。</view>
+      <button class="primary-btn" bindtap="onTapBack">返回</button>
+    </view>
+
+    <view wx:else>
+      <view class="card">
+        <view class="row">
+          <view class="label">茶树编号</view>
+          <input
+            class="input"
+            value="{{treeId}}"
+            placeholder="例如：TREE-001"
+            maxlength="30"
+            bindinput="onTreeIdInput"
+          />
+        </view>
+
+        <view class="row-top">
+          <view class="label">茶农日记</view>
+          <view class="muted hint">发布时附在照片下方</view>
+        </view>
+        <textarea
+          class="textarea"
+          value="{{diary}}"
+          placeholder="例如：今日巡园除草，补施有机肥；新梢长势良好。"
+          maxlength="200"
+          auto-height="true"
+          bindinput="onDiaryInput"
+        ></textarea>
+
+        <view class="pick-row">
+          <button class="ghost-btn" bindtap="onChooseImages">选照片</button>
+          <button class="ghost-btn" bindtap="onChooseCamera">拍照上传</button>
+        </view>
+
+        <view class="picked" wx:if="{{picked.length}}">
+          <view class="picked-title">已选（{{picked.length}}）</view>
+          <view class="picked-grid">
+            <block wx:for="{{picked}}" wx:key="*this">
+              <image class="picked-img" src="{{item}}" mode="aspectFill"></image>
+            </block>
+          </view>
+        </view>
+
+        <view class="submit-row">
+          <button class="primary-btn" disabled="{{!picked.length || !treeId}}" bindtap="onSubmit">
+            发布到实时照看
+          </button>
+        </view>
+      </view>
+
+      <view class="card">
+        <view class="section-title">定时/间隔上传（提醒）</view>
+        <view class="muted sub">
+          小程序无法在后台自动拍照上传，这里提供“间隔提醒”，到点后提示你上传。
+        </view>
+        <view class="remind-row">
+          <view class="label">提醒间隔</view>
+          <picker mode="selector" range="{{intervalOptions}}" range-key="label" value="{{intervalIndex}}" bindchange="onIntervalPick">
+            <view class="picker-pill">{{intervalOptions[intervalIndex].label}}</view>
+          </picker>
+        </view>
+        <view class="pick-row">
+          <button class="ghost-btn" bindtap="onStartReminder" disabled="{{reminding}}">开始提醒</button>
+          <button class="ghost-btn" bindtap="onStopReminder" disabled="{{!reminding}}">停止提醒</button>
+        </view>
+        <view class="muted sub" wx:if="{{reminding}}">已开启：将按间隔弹出提示。</view>
+      </view>
+    </view>
+  </view>
+</page-background>
+

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "茶叶故事",
+  "usingComponents": {
+    "page-background": "/components/page-background/index"
+  }
+}

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="trunkSpring" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6b4f3b"/>
+      <stop offset="1" stop-color="#3a2a20"/>
+    </linearGradient>
+    <linearGradient id="leafSpring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2f8f3a"/>
+      <stop offset="1" stop-color="#79c36a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- �oubaG�o�6� -->
+  <rect width="800" height="500" fill="transparent"/>
+
+  <!-- r -->
+  <path d="M390 500
+           C380 430, 390 380, 410 330
+           C430 280, 450 250, 455 200
+           C465 120, 420 90, 405 45
+           C395 15, 410 0, 430 0
+           C470 25, 490 70, 475 110
+           C465 135, 475 165, 485 190
+           C505 240, 520 280, 505 340
+           C490 395, 450 440, 455 500 Z"
+        fill="url(#trunkSpring)"/>
+
+  <!-- ����	 -->
+  <g>
+    <!-- Ɲ -->
+    <path d="M440 175 C420 150, 420 120, 445 95" stroke="#2f6b35" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <path d="M470 210 C455 180, 470 150, 505 135" stroke="#2f6b35" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <path d="M410 240 C385 210, 395 185, 430 165" stroke="#2f6b35" stroke-width="8" stroke-linecap="round" fill="none"/>
+
+    <!-- ��/齹 -->
+    <circle cx="432" cy="120" r="22" fill="url(#leafSpring)"/>
+    <circle cx="452" cy="145" r="18" fill="#3ea54a"/>
+    <circle cx="465" cy="175" r="20" fill="#5bbd62"/>
+    <circle cx="495" cy="155" r="18" fill="#3ea54a"/>
+    <circle cx="505" cy="140" r="14" fill="#79c36a"/>
+    <circle cx="412" cy="205" r="18" fill="#5bbd62"/>
+    <circle cx="405" cy="240" r="20" fill="#3ea54a"/>
+    <circle cx="435" cy="210" r="16" fill="#79c36a"/>
+  </g>
+
+  <!-- ���B! -->
+  <g opacity="0.85">
+    <circle cx="395" cy="290" r="42" fill="#5bbd62"/>
+    <circle cx="470" cy="305" r="48" fill="#2f8f3a"/>
+    <circle cx="430" cy="345" r="55" fill="#6fcb67"/>
+  </g>
+
+  <!-- I0��{�	 -->
+  <path d="M0 430 C160 410, 290 460, 430 440 C580 420, 680 410, 800 430 L800 500 L0 500 Z" fill="#edf7ec"/>
+</svg>
+

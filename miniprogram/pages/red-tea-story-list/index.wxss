@@ -1,0 +1,2 @@
+/* 与 tea-story-list 列表样式一致，便于维护 */
+@import "../tea-story-list/index.wxss";

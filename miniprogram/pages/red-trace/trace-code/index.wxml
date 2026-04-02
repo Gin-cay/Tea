@@ -1,0 +1,27 @@
+<page-background>
+<view class="page">
+  <view class="code-hero">
+    <view class="code-hero-tag">唯一溯源标识</view>
+    <view class="code-hero-title">红色茶源溯源码</view>
+    <view class="muted small">{{gardenName}}</view>
+  </view>
+
+  <view class="card qr-card">
+    <canvas canvas-id="traceQrCanvas" class="qr-canvas"></canvas>
+    <view class="token-box muted small">令牌已签名防篡改，敏感信息请扫码后在授权页查看</view>
+    <view class="token-text">{{traceTokenShort}}</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">使用说明</view>
+    <view class="muted para">1. 好友使用微信「扫一扫」扫描上方二维码，即可进入溯源详情页。</view>
+    <view class="muted para">2. 正式上架建议配置「扫普通链接打开小程序」或使用服务端生成小程序码。</view>
+    <view class="muted para">3. 令牌经本地签名，生产环境请改为服务端签发。</view>
+  </view>
+
+  <view class="card actions">
+    <button class="btn-main" open-type="share">分享给好友核验</button>
+    <button class="btn-ghost" bindtap="goTraceView">预览扫码效果</button>
+  </view>
+</view>
+</page-background>

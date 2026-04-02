@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="trunkAutumn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6b4f3b"/>
+      <stop offset="1" stop-color="#2a1f18"/>
+    </linearGradient>
+    <linearGradient id="leafAutumn" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2f8f3a"/>
+      <stop offset="0.55" stop-color="#f0b429"/>
+      <stop offset="1" stop-color="#e1583f"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="500" fill="transparent"/>
+
+  <!-- r -->
+  <path d="M390 500
+           C365 430, 390 370, 425 320
+           C460 265, 510 235, 500 170
+           C490 110, 450 85, 430 45
+           C420 20, 430 5, 455 0
+           C510 20, 540 80, 525 130
+           C515 165, 545 215, 555 245
+           C585 325, 550 375, 505 410
+           C455 450, 470 480, 480 500 Z"
+        fill="url(#trunkAutumn)"/>
+
+  <!-- ��	ri� -->
+  <g>
+    <path d="M265 210
+             C305 135, 405 95, 505 135
+             C600 175, 635 275, 580 345
+             C525 415, 410 425, 330 365
+             C255 310, 240 270, 265 210 Z"
+          fill="url(#leafAutumn)" opacity="0.95"/>
+
+    <!-- ��I -->
+    <ellipse cx="430" cy="255" rx="210" ry="165" fill="#ffd56a" opacity="0.25"/>
+
+    <!-- ��/�G� -->
+    <g opacity="0.95">
+      <circle cx="325" cy="235" r="18" fill="#f0b429"/>
+      <circle cx="365" cy="200" r="16" fill="#e1583f"/>
+      <circle cx="415" cy="190" r="20" fill="#2f8f3a"/>
+      <circle cx="475" cy="210" r="16" fill="#f0b429"/>
+      <circle cx="520" cy="250" r="18" fill="#e1583f"/>
+      <circle cx="495" cy="310" r="22" fill="#f0b429"/>
+      <circle cx="450" cy="340" r="18" fill="#e1583f"/>
+      <circle cx="385" cy="325" r="20" fill="#f0b429"/>
+      <circle cx="340" cy="285" r="18" fill="#2f8f3a"/>
+    </g>
+
+    <!-- G���	 -->
+    <g>
+      <circle cx="460" cy="260" r="10" fill="#c9302c" opacity="0.85"/>
+      <circle cx="410" cy="280" r="10" fill="#c9302c" opacity="0.85"/>
+      <circle cx="480" cy="300" r="9" fill="#c9302c" opacity="0.75"/>
+      <circle cx="430" cy="320" r="8" fill="#c9302c" opacity="0.7"/>
+    </g>
+  </g>
+
+  <!-- I0�� -->
+  <path d="M0 430 C160 400, 300 460, 430 440 C600 410, 720 420, 800 440 L800 500 L0 500 Z" fill="#edf7ec"/>
+</svg>
+

@@ -1,0 +1,12 @@
+.sub {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  line-height: 1.45;
+}
+
+.entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+

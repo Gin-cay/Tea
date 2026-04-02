@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="trunkWinter" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6b4f3b"/>
+      <stop offset="1" stop-color="#241b14"/>
+    </linearGradient>
+    <linearGradient id="branchWinter" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3a2a20"/>
+      <stop offset="1" stop-color="#2a1f18"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="500" fill="transparent"/>
+
+  <!-- �c��rp -->
+  <path d="M390 500
+           C372 435, 380 390, 398 345
+           C415 300, 440 250, 455 200
+           C475 130, 465 95, 435 55
+           C410 25, 425 10, 450 0
+           C510 20, 540 90, 520 145
+           C505 190, 525 240, 545 285
+           C575 350, 565 405, 525 440
+           C480 480, 485 495, 495 500 Z"
+        fill="url(#trunkWinter)"/>
+
+  <!-- ;r�� -->
+  <path d="M455 170 C500 145, 540 120, 585 95" stroke="url(#branchWinter)" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <path d="M420 220 C380 210, 330 205, 290 185" stroke="url(#branchWinter)" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <path d="M445 260 C485 285, 520 320, 540 355" stroke="url(#branchWinter)" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <path d="M410 300 C365 320, 330 355, 305 395" stroke="url(#branchWinter)" stroke-width="8" stroke-linecap="round" fill="none"/>
+
+  <!-- ϝ��0:bM��*z	 -->
+  <g opacity="0.85">
+    <path d="M548 120 C565 135, 575 150, 585 170" stroke="#1f1610" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <path d="M305 200 C290 220, 275 240, 265 260" stroke="#1f1610" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <path d="M525 345 C540 360, 555 380, 565 400" stroke="#1f1610" stroke-width="6" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- I0�� -->
+  <path d="M0 430 C170 410, 310 470, 430 450 C600 420, 700 425, 800 440 L800 500 L0 500 Z" fill="#edf7ec"/>
+</svg>
+

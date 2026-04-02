@@ -1,0 +1,6 @@
+<view class="page-shell">
+  <image class="page-bg-img" src="{{src}}" mode="aspectFill" />
+  <view class="page-shell__body">
+    <slot />
+  </view>
+</view>

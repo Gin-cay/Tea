@@ -1,0 +1,18 @@
+<page-background>
+<view class="page">
+  <!-- 红色茶源故事列表（占位） -->
+  <view class="card">
+    <view class="section-title">红色茶源</view>
+    <view class="muted list-hint">以下为示例数据，可替换为接口返回列表。</view>
+    <block wx:for="{{list}}" wx:key="id">
+      <view class="row" data-type="red" data-id="{{item.id}}" bindtap="goDetail">
+        <view>
+          <view class="item-title">{{item.title}}</view>
+          <view class="muted">{{item.desc}}</view>
+        </view>
+        <text class="arrow">›</text>
+      </view>
+    </block>
+  </view>
+</view>
+</page-background>

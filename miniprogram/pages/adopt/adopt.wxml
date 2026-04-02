@@ -1,0 +1,114 @@
+<page-background>
+<view class="page">
+  <view class="card entry">
+    <view>
+      <view class="section-title">茶园认养入口</view>
+      <view class="muted">认养一片茶园，见证一叶到一杯</view>
+    </view>
+    <button class="btn" bindtap="onTapAdoptList">立即认养</button>
+  </view>
+
+  <!-- 茶树数字孪生：插在「茶园认养入口」下方、红色溯源上方（新增模块，不破坏原结构） -->
+  <view class="card twin-adopt-card">
+    <!-- 标题 + 右上角茶季标签（保留原有布局风格；隐藏日期选择UI） -->
+    <view class="twin-head-row">
+      <view class="section-title">茶树数字孪生</view>
+      <view class="twin-season-badge">{{teaSeasonLabel}}</view>
+    </view>
+
+    <!-- 下方茶树图片：四季形态展示（纯图片切换，无 3D/无 Lottie） -->
+    <view class="twin-wrap">
+      <view class="twin-3d-canvas-wrap">
+        <!-- 四季茶树展示：纯图片切换（已移除春季视频功能） -->
+        <image
+          class="twin-season-img"
+          src="{{activeSeasonImage}}"
+          mode="aspectFit"
+          style="opacity: {{imgOpacity}};"
+        ></image>
+      </view>
+
+      <!-- 农事日记摘要（随季节按钮实时更新） -->
+      <view class="twin-diary">{{activeSeasonDiary}}</view>
+    </view>
+  </view>
+
+  <!-- 实时照看：插在「茶树数字孪生」下方（新增模块，不影响其他模块） -->
+  <view class="card care-card">
+    <view class="care-head">
+      <view class="care-head-left">
+        <view class="section-title">实时照看</view>
+        <view class="muted care-sub">茶树编号：{{careTreeId}}</view>
+      </view>
+
+      <!-- 茶农端入口：上传实时照片 + 同步填写日记 -->
+      <view wx:if="{{careRole === 'farmer'}}" class="care-actions">
+        <button class="care-upload-btn" bindtap="onTapCareUploadPage">上传照片</button>
+      </view>
+    </view>
+
+    <!-- 茶农端上传已拆分为独立页面：保持这里仅提供入口，不占用认养页空间 -->
+
+    <!-- 顾客端：照片网格/瀑布流 + 时间线（按时间倒序） -->
+    <view class="care-grid" wx:if="{{careFeed.length}}">
+      <block wx:for="{{careFeed}}" wx:key="id">
+        <view class="care-item" bindtap="onTapCarePreview" data-index="{{index}}">
+          <image class="care-img" src="{{item.imageUrl}}" mode="aspectFill"></image>
+          <view class="care-meta">
+            <view class="care-diary">{{item.diary}}</view>
+            <view class="muted care-time">{{item.takenAtText}}</view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <view class="care-empty" wx:else>
+      <view class="muted">暂无实时照片</view>
+      <view class="muted small">茶农上传后，这里会按时间线自动更新。</view>
+    </view>
+  </view>
+
+  <!-- 认养页快捷入口：红色溯源（支付成功自动生成溯源码） -->
+  <view class="card red-quick" bindtap="onTapRedTrace">
+    <view class="red-quick-badge">红</view>
+    <view class="red-quick-main">
+      <view class="item-title">红色溯源</view>
+      <view class="muted small">溯源码 · 茶农与红色故事 · 研学打卡</view>
+    </view>
+    <text class="plan-arrow">›</text>
+  </view>
+
+  <view class="card">
+    <view class="section-title">认养套餐</view>
+    <block wx:for="{{plans}}" wx:key="id">
+      <view
+        class="plan-item plan-item--tap"
+        data-key="{{item.packageKey}}"
+        bindtap="onTapPlan"
+      >
+        <view class="plan-main">
+          <view class="item-title">{{item.name}}</view>
+          <view class="muted">{{item.desc}}</view>
+        </view>
+        <view class="plan-right">
+          <view class="price">¥{{item.price}}</view>
+          <text class="plan-arrow">›</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="card">
+    <view class="section-title">认养进度查询</view>
+    <block wx:for="{{progressList}}" wx:key="id">
+      <view class="progress-item">
+        <view>
+          <view>{{item.title}}</view>
+          <view class="muted">{{item.time}}</view>
+        </view>
+        <text class="tag">{{item.status}}</text>
+      </view>
+    </block>
+  </view>
+</view>
+</page-background>

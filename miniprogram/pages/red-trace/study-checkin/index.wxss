@@ -1,0 +1,88 @@
+.check-hero {
+  display: flex;
+  gap: 20rpx;
+  align-items: center;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  border: 2rpx solid rgba(201, 48, 44, 0.2);
+}
+
+.check-hero-icon {
+  width: 72rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  background: linear-gradient(135deg, #c9302c, #e85d5d);
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 700;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+}
+
+.check-hero-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 6rpx;
+}
+
+.btn-scan-big {
+  margin: 0;
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: #2f8f3a;
+  color: #fff;
+  font-size: 30rpx;
+  border-radius: 16rpx;
+  border: none;
+}
+
+.btn-scan-big::after {
+  border: none;
+}
+
+.or {
+  text-align: center;
+  margin: 20rpx 0;
+  font-size: 24rpx;
+}
+
+.code-input {
+  border: 1rpx solid #e5e7eb;
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+  font-size: 28rpx;
+  margin-bottom: 16rpx;
+}
+
+.btn-submit {
+  margin: 0;
+  width: 100%;
+  height: 72rpx;
+  line-height: 72rpx;
+  background: rgba(201, 48, 44, 0.12);
+  color: #c9302c;
+  font-size: 28rpx;
+  border-radius: 12rpx;
+  border: none;
+}
+
+.btn-submit::after {
+  border: none;
+}
+
+.medal-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 12rpx 0;
+  font-size: 28rpx;
+}
+
+.medal-icon {
+  color: #e1583f;
+  font-size: 32rpx;
+}

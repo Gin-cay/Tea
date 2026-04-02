@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "商城",
+  "usingComponents": {
+    "page-background": "/components/page-background/index"
+  }
+}

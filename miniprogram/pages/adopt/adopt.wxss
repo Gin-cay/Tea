@@ -1,0 +1,451 @@
+.entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  margin: 0;
+  padding: 0 28rpx;
+  height: 64rpx;
+  line-height: 64rpx;
+  font-size: 26rpx;
+  color: #fff;
+  background: #2f8f3a;
+  border-radius: 999rpx;
+  border: none;
+}
+
+.btn::after {
+  border: none;
+}
+
+.plan-item,
+.progress-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.plan-item--tap {
+  transition: background 0.15s ease;
+}
+
+.plan-item--tap:active {
+  background: rgba(47, 143, 58, 0.06);
+}
+
+.plan-item:last-child,
+.progress-item:last-child {
+  border-bottom: 0;
+}
+
+.plan-main {
+  flex: 1;
+  min-width: 0;
+  padding-right: 16rpx;
+}
+
+.plan-right {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  flex-shrink: 0;
+}
+
+.plan-arrow {
+  font-size: 36rpx;
+  color: #9ca3af;
+  line-height: 1;
+}
+
+.item-title {
+  font-size: 30rpx;
+  margin-bottom: 6rpx;
+}
+
+.price {
+  color: #e1583f;
+  font-weight: 600;
+}
+
+.tag {
+  color: #2f8f3a;
+  background: #edf7ec;
+  border-radius: 999rpx;
+  padding: 6rpx 16rpx;
+}
+
+.red-quick {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16rpx;
+  border: 2rpx solid rgba(201, 48, 44, 0.18);
+  background: linear-gradient(95deg, #fff8f8, #ffffff);
+}
+
+.red-quick:active {
+  opacity: 0.95;
+}
+
+.red-quick-badge {
+  width: 56rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  text-align: center;
+  border-radius: 12rpx;
+  background: #c9302c;
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.red-quick-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.small {
+  font-size: 24rpx;
+  margin-top: 4rpx;
+}
+
+/* ========== 茶树数字孪生（认养页轻量版）========== */
+
+.twin-adopt-card {
+  /* 复用全局 .card 的圆角、阴影、间距；这里只补充模块内部布局 */
+}
+
+/* 标题行：左标题 + 右上角茶季标签 */
+.twin-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.twin-season-badge {
+  flex-shrink: 0;
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #2f8f3a;
+  background: #ffffff;
+  border-radius: 999rpx;
+  padding: 10rpx 18rpx;
+  border: 1rpx solid rgba(47, 143, 58, 0.18);
+}
+
+.twin-label-row {
+  display: flex;
+  justify-content: center; /* 顶部居中排列四个季节标签 */
+  align-items: center;
+  margin-bottom: 16rpx;
+  gap: 18rpx;
+}
+
+.twin-chip {
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 999rpx; /* 圆形季节标签 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2rpx solid transparent;
+  background: rgba(237, 247, 236, 0.95);
+  color: #2f8f3a;
+  /* 让点击季节按钮有平滑高亮切换动画 */
+  transition: background 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms ease,
+    opacity 200ms ease;
+}
+
+.twin-chip--active {
+  background: #2f8f3a; /* 深绿底色 */
+  color: #ffffff; /* 白字 */
+  border-color: rgba(47, 143, 58, 0.35);
+  font-weight: 700;
+  transform: scale(1.06);
+}
+
+.twin-chip--inactive {
+  /* 非灰色淡化：仍保留绿系，但降低视觉权重 */
+  opacity: 0.9;
+  font-weight: 600;
+  border-color: rgba(47, 143, 58, 0.18);
+}
+
+.twin-chip-text {
+  font-size: 26rpx;
+  line-height: 1;
+}
+
+.twin-swiper {
+  width: 100%;
+}
+
+.twin-slide {
+  display: flex;
+  flex-direction: column;
+}
+
+.twin-img {
+  width: 100%;
+  /* 适配认养页卡片高度：让模型占据下半部分但不挤压其他模块 */
+  height: 190rpx;
+  border-radius: 16rpx;
+  display: block;
+  background: #e5e7eb;
+  overflow: hidden;
+  /* 模型切换平滑过渡（配合 swiper 切换） */
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.twin-diary {
+  font-size: 22rpx;
+  color: #6b7280;
+  line-height: 1.45;
+  margin-top: 8rpx;
+  /* 一行摘要（避免挤压其它模块） */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 轻量伪 3D Canvas 容器（替代原 swiper 图片） */
+.twin-wrap {
+  width: 100%;
+}
+
+.twin-3d-canvas-wrap {
+  width: 100%;
+  border-radius: 16rpx;
+  overflow: hidden;
+  /* 浅绿背景用于与页面风格统一（画布透明时可见边界） */
+  background: rgba(237, 247, 236, 0.65);
+}
+
+.twin-3d-canvas {
+  width: 100%;
+  height: 190rpx; /* 与原 swiper 图片高度保持一致，避免页面挤压 */
+  display: block;
+}
+
+.twin-lottie {
+  width: 100%;
+  height: 190rpx; /* 与原 swiper 图片高度一致，保证不挤压其它模块 */
+  display: block;
+}
+
+/* 四季茶树实景/数字模型图片容器：占满模块下半部分 */
+.twin-season-img {
+  width: 100%;
+  height: 190rpx;
+  border-radius: 16rpx;
+  display: block;
+  background: transparent;
+  transition: opacity 220ms ease;
+}
+
+/* 已移除春季视频功能：不再需要 .twin-season-video */
+
+/* ========== 实时照看（认养页）========== */
+.care-card {
+  /* 复用 .card 的圆角/阴影/间距 */
+}
+
+.care-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12rpx;
+}
+
+.care-head-left {
+  min-width: 0;
+}
+
+.care-sub {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+}
+
+.care-actions {
+  flex-shrink: 0;
+}
+
+.care-upload-btn {
+  margin: 0;
+  padding: 0 22rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  font-size: 24rpx;
+  color: #2f8f3a;
+  background: rgba(237, 247, 236, 0.95);
+  border-radius: 999rpx;
+  border: 1rpx solid rgba(47, 143, 58, 0.18);
+}
+
+.care-upload-btn::after {
+  border: none;
+}
+
+.care-uploader {
+  margin-top: 12rpx;
+  padding: 14rpx;
+  border-radius: 16rpx;
+  background: rgba(237, 247, 236, 0.55);
+  border: 1rpx dashed rgba(47, 143, 58, 0.22);
+}
+
+.care-uploader-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12rpx;
+  margin-bottom: 10rpx;
+}
+
+.care-label {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.care-hint {
+  font-size: 22rpx;
+}
+
+.care-textarea {
+  width: 100%;
+  min-height: 88rpx;
+  padding: 12rpx;
+  box-sizing: border-box;
+  border-radius: 14rpx;
+  background: #fff;
+  border: 1rpx solid rgba(47, 143, 58, 0.12);
+  font-size: 24rpx;
+  color: #111827;
+}
+
+.care-picked {
+  margin-top: 12rpx;
+}
+
+.care-picked-title {
+  font-size: 22rpx;
+  color: #374151;
+  margin-bottom: 10rpx;
+}
+
+.care-picked-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.care-picked-img {
+  width: 160rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
+  background: #e5e7eb;
+}
+
+.care-submit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 12rpx;
+}
+
+.care-ghost-btn,
+.care-primary-btn {
+  flex: 1;
+  margin: 0;
+  height: 64rpx;
+  line-height: 64rpx;
+  border-radius: 14rpx;
+  font-size: 24rpx;
+}
+
+.care-ghost-btn {
+  color: #2f8f3a;
+  background: #fff;
+  border: 1rpx solid rgba(47, 143, 58, 0.18);
+}
+
+.care-primary-btn {
+  color: #fff;
+  background: #2f8f3a;
+  border: none;
+}
+
+.care-ghost-btn::after,
+.care-primary-btn::after {
+  border: none;
+}
+
+.care-tip {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  line-height: 1.4;
+}
+
+/* 网格/瀑布流（轻量实现：双列卡片） */
+.care-grid {
+  margin-top: 14rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+}
+
+.care-item {
+  width: calc(50% - 7rpx);
+  border-radius: 16rpx;
+  overflow: hidden;
+  background: #fff;
+  border: 1rpx solid rgba(17, 24, 39, 0.06);
+}
+
+.care-item:active {
+  opacity: 0.96;
+}
+
+.care-img {
+  width: 100%;
+  height: 210rpx;
+  display: block;
+  background: #e5e7eb;
+}
+
+.care-meta {
+  padding: 10rpx 12rpx 12rpx;
+}
+
+.care-diary {
+  font-size: 22rpx;
+  color: #374151;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.care-time {
+  margin-top: 8rpx;
+  font-size: 20rpx;
+}
+
+.care-empty {
+  margin-top: 14rpx;
+  padding: 18rpx 14rpx;
+  border-radius: 16rpx;
+  background: rgba(237, 247, 236, 0.4);
+  border: 1rpx solid rgba(47, 143, 58, 0.1);
+}

@@ -1,0 +1,14 @@
+/* 复用全局 .page / .card / .section-title / .muted / .row / .item-title */
+
+.list-hint {
+  font-size: 24rpx;
+  margin-bottom: 16rpx;
+  line-height: 1.5;
+}
+
+.arrow {
+  color: #9ca3af;
+  font-size: 40rpx;
+  line-height: 1;
+  padding-left: 12rpx;
+}

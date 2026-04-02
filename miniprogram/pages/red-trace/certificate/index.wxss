@@ -1,0 +1,81 @@
+.cert-frame {
+  position: relative;
+  width: 100%;
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 12rpx 40rpx rgba(15, 80, 40, 0.22);
+}
+
+.cert-bg {
+  display: block;
+  width: 100%;
+  vertical-align: top;
+}
+
+.cert-overlay {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 19%;
+  text-align: center;
+  pointer-events: none;
+}
+
+.cert-field {
+  color: #f5f0d8;
+  font-size: 26rpx;
+  font-weight: 500;
+  line-height: 1.45;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.45);
+  margin-bottom: 6rpx;
+}
+
+.cert-field-sm {
+  font-size: 24rpx;
+  opacity: 0.95;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-top: 20rpx;
+}
+
+.btn-green {
+  margin: 0;
+  background: #2f8f3a;
+  color: #fff;
+  border-radius: 999rpx;
+  border: none;
+  font-size: 28rpx;
+}
+
+.btn-green::after {
+  border: none;
+}
+
+.btn-gold {
+  margin: 0;
+  background: linear-gradient(90deg, #b8860b, #d4af37);
+  color: #1a2e16;
+  border-radius: 999rpx;
+  border: none;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.btn-gold::after {
+  border: none;
+}
+
+.print-hint {
+  font-size: 22rpx;
+  line-height: 1.55;
+}
+
+.cert-canvas-hidden {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+}

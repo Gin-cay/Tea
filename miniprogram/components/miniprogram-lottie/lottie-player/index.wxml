@@ -1,0 +1,6 @@
+<!--
+  Lottie 播放容器（轻量版）
+  说明：lottie-miniapp 的组件实现要求 canvas-id 固定为 `lottie-canvas`。
+-->
+<canvas type="2d" canvas-id="lottie-canvas" id="lottie-canvas"></canvas>
+

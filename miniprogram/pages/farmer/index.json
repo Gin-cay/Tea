@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "茶农端",
+  "usingComponents": {
+    "page-background": "/components/page-background/index"
+  }
+}
+

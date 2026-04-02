@@ -1,0 +1,74 @@
+<page-background>
+<view class="detail-shell" wx:if="{{detail}}">
+  <scroll-view class="detail-scroll" scroll-y enhanced="{{false}}" show-scrollbar="{{true}}">
+    <view class="detail-body">
+      <image class="detail-cover" src="{{detail.cover}}" mode="aspectFill" />
+      <view class="card detail-card">
+        <view class="detail-name">{{detail.name}}</view>
+        <view class="detail-cycle">{{detail.cycleLabel}}</view>
+        <view class="detail-meta">
+          品种：{{detail.variety}}　周期：{{detail.period}}　产量：{{detail.yield}}
+        </view>
+        <view class="detail-row">
+          <text class="detail-price">¥{{detail.price}}</text>
+          <text class="detail-join">{{detail.joinCount}} 人已参与</text>
+        </view>
+        <view class="detail-progress">
+          <text class="detail-progress-label">认养进度 {{detail.progress}}%</text>
+          <view class="progress-track">
+            <view class="progress-fill" style="width: {{detail.progress}}%;"></view>
+          </view>
+        </view>
+      </view>
+
+      <view class="card block">
+        <view class="block-title">认养权益</view>
+        <view class="benefit-item" wx:for="{{detail.benefits}}" wx:key="*this">
+          <text class="benefit-dot">●</text>
+          <text class="benefit-txt">{{item}}</text>
+        </view>
+      </view>
+
+      <view class="card block red-adopt-card">
+        <view class="block-title red-adopt-title">
+          <text class="red-adopt-icon">溯</text>
+          红色茶源溯源（认养核心卖点）
+        </view>
+        <text class="block-para">{{detail.redTraceUSP}}</text>
+        <view class="red-adopt-actions">
+          <button class="btn-red-outline" bindtap="goRedTraceHub">进入红色溯源</button>
+          <button class="btn-red-outline" bindtap="goRedStoryThisGarden">本园红色故事</button>
+        </view>
+      </view>
+
+      <view class="card block">
+        <view class="block-title">茶园介绍</view>
+        <text class="block-para">{{detail.gardenIntro}}</text>
+      </view>
+
+      <view class="card block">
+        <view class="block-title">发货说明</view>
+        <text class="block-para">{{detail.shipping}}</text>
+      </view>
+
+      <view class="card block">
+        <view class="block-title">常见问题</view>
+        <view class="faq-item" wx:for="{{detail.faq}}" wx:for-index="idx" wx:key="idx">
+          <view class="faq-q">{{item.q}}</view>
+          <view class="faq-a">{{item.a}}</view>
+        </view>
+      </view>
+
+      <view class="scroll-spacer"></view>
+    </view>
+  </scroll-view>
+
+  <view class="fix-footer safe-bottom">
+    <button class="btn-footer" bindtap="onTapFooterAction">立即认养</button>
+  </view>
+</view>
+
+<view class="detail-empty" wx:else>
+  <view class="card">未找到该认养商品</view>
+</view>
+</page-background>

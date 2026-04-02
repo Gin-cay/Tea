@@ -1,0 +1,45 @@
+<page-background>
+<view class="page">
+  <view class="card search-wrap">
+    <input
+      class="search"
+      placeholder="搜索茶叶、礼盒、产地"
+      value="{{keyword}}"
+      bindinput="onKeywordInput"
+    />
+  </view>
+
+  <scroll-view class="category-scroll" scroll-x>
+    <view class="category-row">
+      <block wx:for="{{categories}}" wx:key="*this">
+        <view
+          class="category-chip {{activeCategory === item ? 'chip-active' : ''}}"
+          data-category="{{item}}"
+          bindtap="onTapCategory"
+        >
+          {{item}}
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <view class="card">
+    <block wx:for="{{products}}" wx:key="id">
+      <view class="product-item" data-id="{{item.id}}" bindtap="onTapProduct">
+        <view class="thumb">
+          <image class="thumb-img" src="{{item.cover}}" mode="aspectFill" />
+        </view>
+        <view class="info">
+          <view class="name-row">
+            <text class="name">{{item.name}}</text>
+            <text class="mall-red-tag">溯源</text>
+          </view>
+          <view class="muted">分类：{{item.category}} | 已售 {{item.sold}}</view>
+          <view class="red-selling-line">{{item.redSelling}}</view>
+          <view class="price">¥{{item.price}}</view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+</page-background>

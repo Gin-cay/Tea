@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "公益里程碑",
+  "usingComponents": {
+    "page-background": "/components/page-background/index"
+  }
+}

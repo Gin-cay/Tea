@@ -1,0 +1,40 @@
+<page-background>
+<view class="page" wx:if="{{story}}">
+  <view class="story-ribbon">红色茶源 · 多媒体叙事</view>
+  <view class="card">
+    <view class="section-title">{{story.title}}</view>
+  </view>
+
+  <block wx:for="{{story.blocks}}" wx:for-index="idx" wx:key="idx">
+    <view class="card block-card" wx:if="{{item.type === 'text'}}">
+      <text class="block-text">{{item.content}}</text>
+    </view>
+    <view class="card block-card" wx:if="{{item.type === 'image'}}">
+      <image class="block-img" src="{{item.src}}" mode="widthFix" />
+      <view class="muted cap">{{item.caption}}</view>
+    </view>
+    <view class="card block-card" wx:if="{{item.type === 'audio'}}">
+      <view class="item-title">{{item.title}}</view>
+      <view class="muted small">{{item.durationLabel}}</view>
+      <audio wx:if="{{item.src}}" src="{{item.src}}" controls class="block-audio"></audio>
+      <view class="muted tip" wx:if="{{!item.src}}">{{item.tip}}</view>
+    </view>
+    <view class="card block-card" wx:if="{{item.type === 'video'}}">
+      <view class="item-title">{{item.title}}</view>
+      <video
+        wx:if="{{item.src}}"
+        class="block-video"
+        src="{{item.src}}"
+        poster="{{item.poster}}"
+        controls
+        show-center-play-btn
+      ></video>
+      <image wx:else class="block-img" src="{{item.poster}}" mode="widthFix" />
+      <view class="muted tip">{{item.tip}}</view>
+    </view>
+  </block>
+</view>
+<view class="page" wx:else>
+  <view class="card muted">暂无故事内容</view>
+</view>
+</page-background>

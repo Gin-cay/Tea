@@ -1,0 +1,54 @@
+<page-background>
+<view class="page">
+  <view class="study-hero">
+    <text class="study-hero-tag">研学闭环</text>
+    <view class="study-hero-title">红色茶旅研学</view>
+    <view class="muted small">线上认养积分可兑换部分研学名额 · 线下打卡解锁勋章</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">红色景点</view>
+    <block wx:for="{{spots}}" wx:key="id">
+      <view class="spot-item">
+        <view class="spot-name">{{item.name}}</view>
+        <view class="muted small">{{item.address}}</view>
+        <view class="spot-badge">{{item.redBadge}}</view>
+        <view class="spot-foot muted small">打卡可得 {{item.pointsReward}} 积分 · 口令 {{item.checkinCode}}</view>
+      </view>
+    </block>
+  </view>
+
+  <view class="card">
+    <view class="section-title">推荐路线</view>
+    <block wx:for="{{routes}}" wx:for-item="route" wx:key="id">
+      <view class="route-item">
+        <view class="route-top">
+          <text class="item-title">{{route.name}}</text>
+          <text class="route-days">{{route.days}}</text>
+        </view>
+        <view class="muted small" wx:for="{{route.highlights}}" wx:for-item="h" wx:key="*this">· {{h}}</view>
+        <view class="muted small booking-tip">{{route.bookingHint}}</view>
+        <view class="route-actions">
+          <button class="btn-mini" data-id="{{route.id}}" bindtap="onBook">预约占位</button>
+          <button
+            wx:if="{{route.needPoints > 0}}"
+            class="btn-mini btn-mini--red"
+            data-id="{{route.id}}"
+            data-points="{{route.needPoints}}"
+            bindtap="onExchange"
+          >
+            积分兑换（{{route.needPoints}}）
+          </button>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="card row-points">
+    <text>当前积分</text>
+    <text class="points">{{points}}</text>
+  </view>
+
+  <button class="btn-checkin" bindtap="goCheckin">去线下打卡</button>
+</view>
+</page-background>

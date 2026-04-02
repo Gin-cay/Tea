@@ -1,0 +1,158 @@
+.pkg-shell {
+  position: relative;
+  min-height: 100vh;
+}
+
+.pkg-scroll {
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.pkg-body {
+  padding-bottom: 24rpx;
+}
+
+.pkg-cover {
+  width: 100%;
+  height: 380rpx;
+  display: block;
+}
+
+.pkg-head {
+  margin: -36rpx 24rpx 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.pkg-name {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 8rpx;
+}
+
+.pkg-sub {
+  font-size: 26rpx;
+  color: #6b7280;
+  margin-bottom: 16rpx;
+}
+
+.pkg-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.pkg-price {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #e1583f;
+}
+
+.pkg-price-note {
+  font-size: 24rpx;
+  color: #9ca3af;
+}
+
+.pkg-period {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  padding: 16rpx;
+  background: #edf7ec;
+  border-radius: 12rpx;
+}
+
+.pkg-period-label {
+  font-size: 22rpx;
+  color: #2f8f3a;
+}
+
+.pkg-period-val {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.pkg-block {
+  margin: 0 24rpx 20rpx;
+}
+
+.block-h {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 16rpx;
+  padding-bottom: 12rpx;
+  border-bottom: 2rpx solid #e8f5e9;
+}
+
+.block-p {
+  font-size: 26rpx;
+  color: #4b5563;
+  line-height: 1.65;
+}
+
+.benefit-row {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 14rpx;
+  font-size: 26rpx;
+  color: #374151;
+  line-height: 1.45;
+}
+
+.benefit-row:last-child {
+  margin-bottom: 0;
+}
+
+.benefit-ico {
+  color: #2f8f3a;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.benefit-txt {
+  flex: 1;
+}
+
+.pkg-spacer {
+  height: 160rpx;
+}
+
+.pkg-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  padding: 16rpx 24rpx;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 -4rpx 24rpx rgba(31, 41, 55, 0.08);
+}
+
+.safe-area {
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+}
+
+.pkg-btn {
+  margin: 0;
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #fff;
+  background: #2f8f3a;
+  border-radius: 44rpx;
+  border: none;
+}
+
+.pkg-btn::after {
+  border: none;
+}
+
+.pkg-empty {
+  padding: 24rpx;
+}

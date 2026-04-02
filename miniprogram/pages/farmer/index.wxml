@@ -1,0 +1,25 @@
+<page-background>
+  <view class="page">
+    <view class="card">
+      <view class="section-title">茶农工作台</view>
+      <view class="muted sub">上传实时照片、填写养护日记，给顾客同步展示。</view>
+    </view>
+
+    <view class="card entry" bindtap="goUpload">
+      <view>
+        <view class="item-title">实时照看上传</view>
+        <view class="muted">拍照/选图 · 关联茶树编号 · 同步日记</view>
+      </view>
+      <text class="plan-arrow">›</text>
+    </view>
+
+    <view class="card entry" bindtap="goMine">
+      <view>
+        <view class="item-title">完善资料</view>
+        <view class="muted">手机号/昵称/头像/地址/身份</view>
+      </view>
+      <text class="plan-arrow">›</text>
+    </view>
+  </view>
+</page-background>
+

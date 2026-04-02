@@ -1,0 +1,22 @@
+<page-background>
+<view class="page" wx:if="{{product}}">
+  <image class="cover" src="{{product.cover}}" mode="aspectFill" />
+
+  <view class="card red-selling">
+    <view class="red-selling-tag">核心卖点 · 红色溯源</view>
+    <view class="red-selling-title">{{product.redUSP}}</view>
+    <view class="muted small">{{product.traceFeature}}</view>
+    <button class="btn-outline-red" bindtap="goRedHub">了解红色溯源体系</button>
+  </view>
+
+  <view class="card">
+    <view class="detail-name">{{product.name}}</view>
+    <view class="muted">产地：{{product.origin}}</view>
+    <view class="price">¥{{product.price}}</view>
+    <view class="muted para">本商品支持茶园直链溯源展示，认养用户可生成专属溯源码（详见认养与红色溯源模块）。</view>
+  </view>
+</view>
+<view class="page" wx:else>
+  <view class="card muted">商品不存在</view>
+</view>
+</page-background>

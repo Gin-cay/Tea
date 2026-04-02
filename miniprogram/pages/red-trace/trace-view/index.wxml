@@ -1,0 +1,103 @@
+<page-background>
+<view class="page" wx:if="{{valid}}">
+  <view class="trace-banner">
+    <text class="trace-banner-icon">溯源</text>
+    <text class="trace-banner-txt">红色茶源 · 可信链路</text>
+  </view>
+
+  <view class="card">
+    <view class="section-title">茶园位置</view>
+    <view class="item-title">{{profile.gardenName}}</view>
+    <view class="muted para">{{profile.locationLabel}}</view>
+    <view class="coord muted small">坐标参考：{{profile.coordinates.lat}}°N, {{profile.coordinates.lng}}°E</view>
+    <view class="muted small tip">{{profile.mapHint}}</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">茶农档案与奋斗故事</view>
+    <view class="farmer-row">
+      <image class="farmer-av" src="{{profile.farmer.avatar}}" mode="aspectFill" />
+      <view class="farmer-meta">
+        <view class="item-title">{{profile.farmer.name}}</view>
+        <view class="muted para">{{profile.farmer.story}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 茶树数字孪生（轻量）：四季横向滑动 + 当前季节高亮，数据见 utils/seasonTwinMock.js -->
+  <view class="card twin-wrap" wx:if="{{seasonTwin.length}}">
+    <view class="section-title">茶树数字孪生</view>
+    <view class="muted small twin-sub">四季实景与农事日记 · 轻量台账</view>
+
+    <!-- 季节标签：点击切换并驱动下方 scroll-view 滚动定位 -->
+    <scroll-view class="twin-chip-scroll" scroll-x scroll-with-animation>
+      <view class="twin-chip-row">
+        <view
+          wx:for="{{seasonTwin}}"
+          wx:key="key"
+          class="twin-chip {{activeSeasonKey === item.key ? 'twin-chip--active' : ''}}"
+          data-key="{{item.key}}"
+          bindtap="onSeasonChipTap"
+        >
+          {{item.label}}季
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 横向滑动卡片：每季一图一文 -->
+    <!-- scroll-into-view 目标须为 scroll-view 直接子节点 -->
+    <scroll-view class="twin-pan-scroll" scroll-x scroll-with-animation scroll-into-view="{{twinScrollInto}}">
+      <view
+        wx:for="{{seasonTwin}}"
+        wx:key="key"
+        id="season-{{item.key}}"
+        class="twin-pan-card"
+        data-key="{{item.key}}"
+        bindtap="onSeasonCardTap"
+      >
+        <image class="twin-pan-img" src="{{item.image}}" mode="aspectFill" />
+        <view class="twin-pan-label">{{item.label}}季 · 园相</view>
+        <view class="twin-pan-diary">{{item.diary}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">茶区红色革命历史</view>
+    <image class="red-cover" src="{{profile.redHistory.cover}}" mode="aspectFill" />
+    <view class="item-title sub">{{profile.redHistory.title}}</view>
+    <block wx:for="{{profile.redHistory.paragraphs}}" wx:key="*this">
+      <view class="muted para">{{item}}</view>
+    </block>
+    <button class="btn-link" data-id="{{profile.gardenId}}" bindtap="goRichStory">多媒体红色故事</button>
+  </view>
+
+  <view class="card">
+    <view class="section-title">种植 / 采摘 / 加工全流程</view>
+    <block wx:for="{{profile.process}}" wx:key="key">
+      <view class="proc-item">
+        <view class="proc-head">
+          <text class="proc-title">{{item.title}}</text>
+          <text class="proc-pct">{{item.pct}}%</text>
+        </view>
+        <view class="progress-track">
+          <view class="progress-fill progress-fill--red" style="width: {{item.pct}}%;"></view>
+        </view>
+        <view class="muted small">{{item.desc}}</view>
+      </view>
+    </block>
+  </view>
+
+  <view class="card muted small">
+    订单关联：{{parsed.orderId}} · 令牌时间戳 {{parsed.ts}}
+  </view>
+</view>
+
+<view class="page" wx:else>
+  <view class="card">
+    <view class="section-title">无法解析溯源码</view>
+    <view class="muted para">令牌无效或已损坏，请重新向认养用户索取二维码。</view>
+    <button class="btn-back" bindtap="goHub">返回红色溯源首页</button>
+  </view>
+</view>
+</page-background>

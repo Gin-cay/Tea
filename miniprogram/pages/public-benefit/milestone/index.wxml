@@ -1,0 +1,105 @@
+<page-background>
+  <view class="page">
+    <view class="card summary-card">
+      <view class="section-title">公益累计</view>
+      <view class="summary-amount">¥{{summary.totalAmount}}</view>
+      <view class="muted summary-sub">
+        当前里程碑：{{summary.currentMilestoneName}}（{{summary.currentMilestoneProgress}} / {{summary.currentMilestoneTarget}}）
+      </view>
+      <view class="summary-grid">
+        <view class="summary-cell">
+          <text class="cell-k muted">已完成</text>
+          <text class="cell-v">{{summary.completedCount}}</text>
+        </view>
+        <view class="summary-cell">
+          <text class="cell-k muted">待解锁</text>
+          <text class="cell-v">{{summary.pendingCount}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="section-title">里程碑进度</view>
+      <block wx:for="{{milestones}}" wx:key="id">
+        <view class="milestone-item" bindtap="onTapMilestone" data-index="{{index}}">
+          <view class="milestone-top">
+            <text class="milestone-name">{{item.name}}</text>
+            <text class="status {{item.statusClass}}">{{item.statusText}}</text>
+          </view>
+          <view class="muted milestone-target">目标金额：¥{{item.targetAmount}}</view>
+          <view class="progress-track">
+            <view class="progress-fill" style="width: {{item.progressPercent}}%;"></view>
+          </view>
+          <view class="milestone-bottom">
+            <text class="muted">当前进度：¥{{item.currentAmount}} / ¥{{item.targetAmount}}</text>
+            <text class="detail-link" wx:if="{{item.status==='completed'}}">查看详情 ></text>
+          </view>
+          <view class="donate-content">公益内容：{{item.donateContent}}</view>
+        </view>
+      </block>
+    </view>
+
+    <view class="card">
+      <view class="section-title">积分中心</view>
+      <view class="points-row">
+        <view>
+          <view class="points-value">{{points.balance}}</view>
+          <view class="muted points-expire">有效期至 {{points.expiringAt}}</view>
+        </view>
+        <button class="redeem-btn" bindtap="onOpenRedeem">积分兑换</button>
+      </view>
+      <view class="redeem-list" wx:if="{{showRedeem}}">
+        <block wx:for="{{redeemGoods}}" wx:key="id">
+          <view class="redeem-item">
+            <view>
+              <view class="redeem-title">{{item.title}}</view>
+              <view class="muted">所需积分：{{item.pointsCost}}</view>
+            </view>
+            <button
+              class="redeem-item-btn"
+              bindtap="onTapRedeem"
+              data-id="{{item.id}}"
+              data-title="{{item.title}}"
+              data-cost="{{item.pointsCost}}"
+            >
+              兑换
+            </button>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <view class="detail-mask" wx:if="{{activeRecord}}" bindtap="onCloseDetail"></view>
+  <view class="detail-panel" wx:if="{{activeRecord}}">
+    <view class="detail-header">
+      <text class="detail-title">{{activeRecord.milestoneName}}</text>
+      <text class="detail-close" bindtap="onCloseDetail">关闭</text>
+    </view>
+    <view class="detail-item">
+      <view class="detail-k muted">公益捐助详情</view>
+      <view class="detail-v">{{activeRecord.donateDetail}}</view>
+    </view>
+    <view class="detail-item">
+      <view class="detail-k muted">执行进度</view>
+      <view class="detail-v">{{activeRecord.executionProgress}}</view>
+    </view>
+    <view class="detail-item">
+      <view class="detail-k muted">结果反馈（图文）</view>
+      <block wx:for="{{activeRecord.feedbackList}}" wx:key="index">
+        <view class="feedback-row">
+          <image class="feedback-img" src="{{item.imageUrl}}" mode="aspectFill"></image>
+          <text class="feedback-text">{{item.text}}</text>
+        </view>
+      </block>
+    </view>
+    <view class="detail-item">
+      <view class="detail-k muted">公益电子证书</view>
+      <view class="cert-row">
+        <text>证书编号：{{activeRecord.certificate.certNo}}</text>
+        <text>签发机构：{{activeRecord.certificate.issuer}}</text>
+        <text>签发时间：{{activeRecord.certificate.issuedAt}}</text>
+      </view>
+    </view>
+  </view>
+</page-background>
