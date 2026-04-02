@@ -90,6 +90,30 @@ def get_post(post_id):
     return jsonify(p.to_dict())
 
 
+@community_bp.route("/posts/<post_id>/delete", methods=["POST", "OPTIONS"])
+def delete_post(post_id):
+    if request.method == "OPTIONS":
+        return "", 204
+    oid = _openid()
+    if not oid:
+        return jsonify({"ok": False, "message": "未登录"}), 401
+    p = CommunityPost.query.get(post_id)
+    if not p:
+        return jsonify({"ok": False, "message": "动态不存在"}), 404
+    if p.author_id != oid:
+        return jsonify({"ok": False, "message": "无权删除"}), 403
+    CommunityComment.query.filter_by(post_id=post_id).delete(synchronize_session=False)
+    CommunityLike.query.filter_by(post_id=post_id).delete(synchronize_session=False)
+    CommunityCollect.query.filter_by(post_id=post_id).delete(synchronize_session=False)
+    CommunityNotification.query.filter(CommunityNotification.post_id == post_id).delete(
+        synchronize_session=False
+    )
+    CommunityReport.query.filter_by(post_id=post_id).delete(synchronize_session=False)
+    db.session.delete(p)
+    db.session.commit()
+    return jsonify({"ok": True})
+
+
 @community_bp.route("/posts", methods=["POST", "OPTIONS"])
 def publish():
     oid = _openid()
