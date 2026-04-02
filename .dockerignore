@@ -1,0 +1,7 @@
+.git
+miniprogram
+cloudfunctions
+*.md
+project.config.json
+project.private.config.json
+uploadCloudFunction.sh
