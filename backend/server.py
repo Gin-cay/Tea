@@ -134,12 +134,33 @@ def user_id():
     return request.headers.get("X-User-Id") or "u-demo"
 
 
+def _wechat_auth_body():
+    """兼容小程序 wx.request：get_json、原始 JSON 字符串、form 字段。"""
+    data = request.get_json(silent=True, force=True)
+    if isinstance(data, dict):
+        c = data.get("code")
+        if c is not None and str(c).strip():
+            return data
+    raw = (request.get_data(cache=False, as_text=True) or "").strip()
+    if raw:
+        try:
+            data = json.loads(raw)
+            if isinstance(data, dict) and data.get("code") is not None:
+                return data
+        except Exception:
+            pass
+    code = request.form.get("code") if request.form else None
+    if code:
+        return {"code": code}
+    return {}
+
+
 @app.route("/api/auth/wechat", methods=["POST", "OPTIONS"])
 def wechat_code2session():
     if request.method == "OPTIONS":
         return "", 204
-    body = request.get_json(silent=True) or {}
-    code = body.get("code")
+    body = _wechat_auth_body()
+    code = str(body.get("code") or "").strip()
     if not code:
         return jsonify({"error": "missing code"}), 400
     appid = os.getenv("WECHAT_APPID", "")
