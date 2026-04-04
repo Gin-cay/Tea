@@ -14,7 +14,7 @@ Page({
       { title: "研学打卡", url: "/pages/red-trace/study-checkin/index", badge: "卡" },
       { title: "电子证书", url: "/pages/red-trace/certificate/index", badge: "证", needCert: true },
       { title: "公益里程碑", url: "/pages/public-benefit/milestone/index", badge: "益" },
-      { title: "我的订单", url: "" },
+      { title: "我的订单", url: "/pages/mall-order-list/index" },
       { title: "我的收藏", url: "" },
       { title: "收货地址", url: "" },
       { title: "客服中心", url: "" },

@@ -1,26 +1,35 @@
 /**
  * 红色故事富媒体页：图文 + 音频 + 短视频（URL 由后台下发）。
  */
-const mock = require("../../../utils/redTraceMockData");
+const api = require("../../../utils/redTraceApi");
 const analytics = require("../../../utils/analytics");
 
 Page({
   data: {
-    story: null
+    story: null,
+    loadError: ""
   },
 
   onLoad(options) {
-    /** @type {string} 分享路径携带 */
     this.shareGardenId = (options && options.gardenId) || "1";
     const gardenId = this.shareGardenId;
-    const profile = mock.getGardenProfile(gardenId);
-    const story = profile && profile.richStory ? profile.richStory : null;
-    this.setData({ story });
-    if (story) {
-      const t = story.title;
-      wx.setNavigationBarTitle({ title: t.length > 14 ? `${t.slice(0, 14)}…` : t });
-      analytics.track(analytics.EVENTS.RED_STORY_VIEW, { gardenId });
-    }
+    wx.showLoading({ title: "加载中" });
+    api
+      .fetchGardenRedProfile(gardenId)
+      .then((profile) => {
+        const story = profile && profile.richStory ? profile.richStory : null;
+        this.setData({ story, loadError: story ? "" : "暂无故事内容" });
+        if (story) {
+          const t = story.title;
+          wx.setNavigationBarTitle({ title: t.length > 14 ? `${t.slice(0, 14)}…` : t });
+          analytics.track(analytics.EVENTS.RED_STORY_VIEW, { gardenId });
+        }
+      })
+      .catch(() => {
+        this.setData({ story: null, loadError: "加载失败" });
+        wx.showToast({ title: "网络异常", icon: "none" });
+      })
+      .finally(() => wx.hideLoading());
   },
 
   onShareAppMessage() {

@@ -1,19 +1,17 @@
 /**
- * 认养支付成功后登记溯源记录、生成令牌等业务编排。
+ * 认养支付成功后登记溯源记录，并同步到服务端。
  */
 
 const { buildTraceToken } = require("./traceCrypto");
 const storage = require("./redTraceStorage");
-const mock = require("./redTraceMockData");
+const shopApi = require("./shopApi");
 
 /**
- * 支付成功后写入本地溯源档案（演示）
  * @param {{ gardenId: string, orderId: string, gardenName?: string, orderMode?: string }} p
  */
 function registerTraceAfterAdopt(p) {
   const gid = String(p.gardenId);
-  const profile = mock.getGardenProfile(gid);
-  const gardenName = p.gardenName || (profile && profile.gardenName) || `茶园 #${gid}`;
+  const gardenName = p.gardenName || `茶园 #${gid}`;
   const orderId = p.orderId || `R${Date.now()}`;
   const traceToken = buildTraceToken({
     gardenId: gid,
@@ -29,6 +27,15 @@ function registerTraceAfterAdopt(p) {
     createdAt: Date.now()
   };
   storage.addTraceRecord(record);
+  shopApi
+    .postUserTraceRecord({
+      traceToken: record.traceToken,
+      gardenId: record.gardenId,
+      orderId: record.orderId,
+      gardenName: record.gardenName,
+      orderMode: record.orderMode
+    })
+    .catch(() => {});
   return record;
 }
 

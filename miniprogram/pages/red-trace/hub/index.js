@@ -3,20 +3,63 @@
  */
 const analytics = require("../../../utils/analytics");
 const storage = require("../../../utils/redTraceStorage");
+const shopApi = require("../../../utils/shopApi");
+
+function mergeTraceRecords(local, remoteList) {
+  const out = [];
+  const seen = new Set();
+  (remoteList || []).forEach((r) => {
+    const t = r.traceToken;
+    if (t && !seen.has(t)) {
+      seen.add(t);
+      out.push({
+        traceToken: t,
+        gardenId: r.gardenId,
+        orderId: r.orderId,
+        gardenName: r.gardenName || "",
+        orderMode: r.orderMode || "garden",
+        createdAt: r.createdAt ? Date.parse(r.createdAt.replace("Z", "")) : Date.now()
+      });
+    }
+  });
+  (local || []).forEach((r) => {
+    if (r.traceToken && !seen.has(r.traceToken)) {
+      seen.add(r.traceToken);
+      out.push(r);
+    }
+  });
+  return out;
+}
 
 Page({
   data: {
+    traceList: [],
     recordCount: 0,
     points: 0
   },
 
   onShow() {
-    const list = storage.getTraceRecords();
-    this.setData({
-      recordCount: list.length,
-      points: storage.getPoints()
-    });
-    analytics.track(analytics.EVENTS.RED_TRACE_HUB_VIEW, { count: list.length });
+    const local = storage.getTraceRecords();
+    shopApi
+      .fetchUserTraceRecords()
+      .then((body) => {
+        const remote = (body && body.list) || [];
+        const merged = mergeTraceRecords(local, remote);
+        this.setData({
+          traceList: merged,
+          recordCount: merged.length,
+          points: storage.getPoints()
+        });
+        analytics.track(analytics.EVENTS.RED_TRACE_HUB_VIEW, { count: merged.length });
+      })
+      .catch(() => {
+        this.setData({
+          traceList: local,
+          recordCount: local.length,
+          points: storage.getPoints()
+        });
+        analytics.track(analytics.EVENTS.RED_TRACE_HUB_VIEW, { count: local.length });
+      });
   },
 
   onShareAppMessage() {
@@ -27,7 +70,7 @@ Page({
   },
 
   goLatestCode() {
-    const list = storage.getTraceRecords();
+    const list = this.data.traceList || [];
     if (!list.length) {
       wx.showToast({ title: "暂无溯源码", icon: "none" });
       return;
@@ -47,7 +90,7 @@ Page({
   },
 
   goCertListHint() {
-    const list = storage.getTraceRecords();
+    const list = this.data.traceList || [];
     if (!list.length) {
       wx.showModal({
         title: "电子证书",
@@ -69,7 +112,6 @@ Page({
     });
   },
 
-  /** 调起微信扫一扫，识别溯源令牌文本 */
   onScanTrace() {
     wx.scanCode({
       onlyFromCamera: false,

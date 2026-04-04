@@ -1,30 +1,34 @@
 const realCareStorage = require("../../utils/realCareStorage");
+const catalogApi = require("../../utils/catalogApi");
+const redTraceApi = require("../../utils/redTraceApi");
+
+const DEFAULT_PLANS = [
+  {
+    id: 1,
+    packageKey: "experience",
+    name: "体验认养",
+    price: "199/季",
+    desc: "单株茶树，季度回寄茶样"
+  },
+  {
+    id: 2,
+    packageKey: "family",
+    name: "家庭认养",
+    price: "699/年",
+    desc: "三株茶树，全年采摘纪实"
+  },
+  {
+    id: 3,
+    packageKey: "enterprise",
+    name: "企业认养",
+    price: "2999/年",
+    desc: "专属茶园牌，企业定制礼盒"
+  }
+];
 
 Page({
   data: {
-    plans: [
-      {
-        id: 1,
-        packageKey: "experience",
-        name: "体验认养",
-        price: "199/季",
-        desc: "单株茶树，季度回寄茶样"
-      },
-      {
-        id: 2,
-        packageKey: "family",
-        name: "家庭认养",
-        price: "699/年",
-        desc: "三株茶树，全年采摘纪实"
-      },
-      {
-        id: 3,
-        packageKey: "enterprise",
-        name: "企业认养",
-        price: "2999/年",
-        desc: "专属茶园牌，企业定制礼盒"
-      }
-    ],
+    plans: DEFAULT_PLANS,
     progressList: [
       { id: 1, title: "春茶采摘", time: "2026-03-25", status: "已完成" },
       { id: 2, title: "制茶发酵", time: "2026-03-29", status: "进行中" }
@@ -50,8 +54,26 @@ Page({
 
   /** 页面初始化：首次进入时按当天自动匹配茶季 */
   onLoad() {
+    this.loadPlansFromApi();
     this.applyTeaSeasonForToday(true);
     this.initRealCare();
+  },
+
+  async loadPlansFromApi() {
+    try {
+      const list = await catalogApi.fetchAdoptPackages();
+      if (!list || !list.length) return;
+      const plans = list.map((p, idx) => ({
+        id: idx + 1,
+        packageKey: p.packageKey,
+        name: p.name,
+        price: p.priceDisplay || (p.priceNote ? p.priceNote.replace(/\s/g, "") : `${p.price}元`),
+        desc: p.desc || ""
+      }));
+      this.setData({ plans });
+    } catch (e) {
+      /* 保持 DEFAULT_PLANS */
+    }
   },
 
   /** 每次回到页面都按“真实当天日期”无感刷新（跨天/前后台切换更准确） */
@@ -82,12 +104,35 @@ Page({
     wx.navigateTo({ url: "/pages/red-trace/hub/index" });
   },
 
-  /** 按当天日期匹配并更新 UI（带淡入切换，做到“无感知”） */
+  /** 优先拉取后端季节孪生，失败则回退本地日期规则 */
   applyTeaSeasonForToday(isFirstPaint) {
-    const today = this.formatDate(new Date());
-    const mapped = this.mapTeaSeasonByDate(today);
+    const gardenId = "1";
+    redTraceApi
+      .fetchSeasonTimeline(gardenId)
+      .then((data) => {
+        const twin = data.seasonTwin || [];
+        const activeKey = data.currentSeasonKey || "spring";
+        let hit = twin.find((t) => t.key === activeKey);
+        if (!hit && twin.length) hit = twin[0];
+        if (!hit) throw new Error("empty twin");
+        const mapped = {
+          label: hit.label || hit.key,
+          image: hit.image,
+          diary: hit.diary || ""
+        };
+        this._applySeasonUi(mapped, isFirstPaint);
+      })
+      .catch(() => {
+        const today = this.formatDate(new Date());
+        const mapped = this.mapTeaSeasonByDate(today);
+        this._applySeasonUi(
+          { label: mapped.label, image: mapped.image, diary: mapped.diary },
+          isFirstPaint
+        );
+      });
+  },
 
-    // 首屏不做淡出，避免闪烁；后续回到页面可无感更新
+  _applySeasonUi(mapped, isFirstPaint) {
     if (isFirstPaint) {
       this.setData({
         teaSeasonLabel: mapped.label,
@@ -97,7 +142,6 @@ Page({
       });
       return;
     }
-
     this.setData({ imgOpacity: 0 });
     if (this._twinImgTimer) clearTimeout(this._twinImgTimer);
     this._twinImgTimer = setTimeout(() => {

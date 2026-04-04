@@ -1,5 +1,7 @@
-flask==3.1.0
-flask-sqlalchemy==3.1.1
-gunicorn==23.0.0
-# Cloud DATABASE_URL 使用 mysql+pymysql:// 时需要
-pymysql==1.1.1
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+sqlalchemy>=2.0.36
+pydantic-settings>=2.6.0
+python-jose[cryptography]>=3.3.0
+python-multipart>=0.0.12
+pymysql>=1.1.1

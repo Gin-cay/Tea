@@ -1,0 +1,21 @@
+<page-background>
+<view class="page">
+  <view class="card" wx:if="{{loadError}}">
+    <view class="muted">{{loadError}}</view>
+  </view>
+
+  <block wx:for="{{list}}" wx:key="orderNo">
+    <view class="card order-row" data-no="{{item.orderNo}}" bindtap="goDetail">
+      <view class="row-top">
+        <text class="no">{{item.orderNo}}</text>
+        <text class="status">{{item.status}}</text>
+      </view>
+      <view class="muted">¥{{item.totalYuan}} · {{item.items.length}} 件</view>
+    </view>
+  </block>
+
+  <view class="card" wx:if="{{!list.length && !loadError}}">
+    <view class="muted">暂无订单</view>
+  </view>
+</view>
+</page-background>

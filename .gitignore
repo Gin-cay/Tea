@@ -13,6 +13,7 @@ __pycache__/
 venv/
 .env
 .env.*
+!.env.example
 
 # SQLite（本地 / 容器内数据库文件勿提交）
 *.db

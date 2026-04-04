@@ -4,19 +4,16 @@
 const { parseTraceToken } = require("../../../utils/traceCrypto");
 const api = require("../../../utils/redTraceApi");
 const analytics = require("../../../utils/analytics");
-const seasonTwinMock = require("../../../utils/seasonTwinMock");
 
 Page({
   data: {
     valid: false,
     parsed: null,
     profile: null,
-    /** 四季茶树孪生数据 */
     seasonTwin: [],
-    /** 当前选中季节 key：spring | summer | autumn | winter */
     activeSeasonKey: "",
-    /** 横向滚动定位到 id="season-xxx" */
-    twinScrollInto: ""
+    twinScrollInto: "",
+    loadError: ""
   },
 
   onLoad(options) {
@@ -26,28 +23,44 @@ Page({
       this.setData({ valid: false });
       return;
     }
-    api.fetchGardenRedProfile(parsed.gardenId).then((profile) => {
-      if (!profile) {
-        this.setData({ valid: false });
-        return;
-      }
-      const seasonTwin = seasonTwinMock.getSeasonTwinConfig(profile.gardenId);
-      const activeSeasonKey = seasonTwinMock.getCurrentSeasonKey();
-      this.setData({
-        valid: true,
-        parsed,
-        profile,
-        seasonTwin,
-        activeSeasonKey,
-        twinScrollInto: `season-${activeSeasonKey}`
-      });
-      analytics.track(analytics.EVENTS.RED_TRACE_SCAN, {
-        gardenId: parsed.gardenId
-      });
-    });
+    this.setData({ parsed });
+    wx.showLoading({ title: "加载中" });
+    api
+      .fetchGardenRedProfile(parsed.gardenId)
+      .then((profile) => {
+        if (!profile) {
+          this.setData({ valid: false, loadError: "茶园档案不存在" });
+          return;
+        }
+        return api.fetchSeasonTimeline(profile.gardenId).then((st) => ({
+          profile,
+          st
+        }));
+      })
+      .then((pack) => {
+        if (!pack) return;
+        const { profile, st } = pack;
+        const seasonTwin = (st && st.seasonTwin) || [];
+        const activeSeasonKey = (st && st.currentSeasonKey) || "spring";
+        this.setData({
+          valid: true,
+          profile,
+          seasonTwin,
+          activeSeasonKey,
+          twinScrollInto: `season-${activeSeasonKey}`,
+          loadError: ""
+        });
+        analytics.track(analytics.EVENTS.RED_TRACE_SCAN, {
+          gardenId: profile.gardenId
+        });
+      })
+      .catch(() => {
+        this.setData({ valid: false, loadError: "网络异常，请重试" });
+        wx.showToast({ title: "加载失败", icon: "none" });
+      })
+      .finally(() => wx.hideLoading());
   },
 
-  /** 点击季节标签：高亮 + 滚动到对应卡片 */
   onSeasonChipTap(e) {
     const key = e.currentTarget.dataset.key;
     if (!key) return;
@@ -57,7 +70,6 @@ Page({
     });
   },
 
-  /** 点击卡片：与标签联动（便于用户点图时也切换高亮） */
   onSeasonCardTap(e) {
     const key = e.currentTarget.dataset.key;
     if (!key) return;
@@ -76,9 +88,5 @@ Page({
     wx.navigateTo({
       url: `/pages/red-trace/story-rich/index?gardenId=${id}`
     });
-  },
-
-  goHub() {
-    wx.navigateTo({ url: "/pages/red-trace/hub/index" });
   }
 });

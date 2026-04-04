@@ -1,4 +1,5 @@
-const realCareStorage = require("../../../utils/realCareStorage");
+const http = require("../../../utils/http");
+const auth = require("../../../utils/auth");
 
 Page({
   data: {
@@ -19,14 +20,14 @@ Page({
   },
 
   onLoad(query) {
-    const ctx = realCareStorage.ensureUserContext();
+    const storage = require("../../../utils/realCareStorage");
+    const ctx = storage.ensureUserContext();
     const treeIdFromQuery = query && query.treeId ? decodeURIComponent(query.treeId) : "";
     const treeId = treeIdFromQuery || (ctx.treeIds && ctx.treeIds[0]) || "TREE-001";
     this.setData({ role: ctx.role, userId: ctx.uid, treeId });
   },
 
   onShow() {
-    // 茶农端上传页：如未完善资料，阻止上传并引导完善（属于关键动作页）
     const app = getApp();
     const state = app.getProfileGateState();
     if (!state || !state.complete) {
@@ -83,7 +84,7 @@ Page({
     });
   },
 
-  onSubmit() {
+  async onSubmit() {
     if (this.data.role !== "farmer") return;
     const treeId = (this.data.treeId || "").trim();
     const picked = this.data.picked || [];
@@ -96,23 +97,33 @@ Page({
       return;
     }
 
-    const now = Date.now();
+    if (!http.getStoredToken()) {
+      try {
+        await auth.silentLogin();
+      } catch (e) {
+        wx.showToast({ title: "请先登录", icon: "none" });
+        return;
+      }
+    }
+
     const diary = (this.data.diary || "").trim() || "今日照看记录：生长良好，持续养护。";
-    const uploaderId = this.data.userId || "farmer";
 
-    const items = picked.map((p, i) => ({
-      id: `care_${now}_${i}_${Math.floor(Math.random() * 1000)}`,
-      treeId,
-      uploaderId,
-      uploaderRole: "farmer",
-      imageUrl: p, // 演示：临时路径；生产应为 uploadFile 后的 https url
-      diary,
-      takenAt: now + i
-    }));
-    realCareStorage.appendItems(items);
-
-    this.setData({ picked: [], diary: "" });
-    wx.showToast({ title: "已发布", icon: "success" });
+    try {
+      for (let i = 0; i < picked.length; i += 1) {
+        await http.uploadFile({
+          path: "/api/real-care/upload",
+          filePath: picked[i],
+          formData: { treeId, diary },
+          showLoading: true,
+          loadingTitle: `上传 ${i + 1}/${picked.length}`,
+          needAuth: true
+        });
+      }
+      this.setData({ picked: [], diary: "" });
+      wx.showToast({ title: "已发布", icon: "success" });
+    } catch (e) {
+      /* toast by http */
+    }
   },
 
   onIntervalPick(e) {
@@ -147,4 +158,3 @@ Page({
     if (this.data.reminding) this.setData({ reminding: false });
   }
 });
-

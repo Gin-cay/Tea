@@ -24,7 +24,7 @@
     </view>
   </view>
 
-  <!-- 茶树数字孪生（轻量）：四季横向滑动 + 当前季节高亮，数据见 utils/seasonTwinMock.js -->
+  <!-- 茶树数字孪生：季节数据来自服务端 /garden/season-timeline/{gardenId} -->
   <view class="card twin-wrap" wx:if="{{seasonTwin.length}}">
     <view class="section-title">茶树数字孪生</view>
     <view class="muted small twin-sub">四季实景与农事日记 · 轻量台账</view>

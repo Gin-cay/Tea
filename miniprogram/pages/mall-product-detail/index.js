@@ -1,51 +1,70 @@
 /**
- * 商城商品详情：突出「红色溯源」核心卖点，跳转溯源枢纽。
+ * 商城商品详情
  */
-const CATALOG = {
-  1: {
-    id: 1,
-    name: "明前龙井",
-    category: "绿茶",
-    price: 128,
-    sold: 321,
-    cover: "/images/banner-home.png",
-    origin: "浙西共富茶园基地",
-    redUSP: "一品一码绑定茶园档案，扫码可见茶农故事与红色茶乡历史。",
-    traceFeature: "支持认养用户同步生成红色茶源溯源二维码，全流程种植加工可视化。"
-  },
-  2: {
-    id: 2,
-    name: "正山小种",
-    category: "红茶",
-    price: 96,
-    sold: 210,
-    cover: "/images/ai_example1.png",
-    origin: "武夷山脉云雾产区",
-    redUSP: "红色茶路文化赋能，礼盒附研学打卡指引。",
-    traceFeature: "有机产区 + 红色叙事双认证展示（演示数据）。"
-  },
-  3: {
-    id: 3,
-    name: "春茶礼盒",
-    category: "礼盒",
-    price: 198,
-    sold: 125,
-    cover: "/images/banner-mall.png",
-    origin: "多产地优选拼配",
-    redUSP: "礼盒内含红色茶乡明信片与溯源导览入口。",
-    traceFeature: "企业团购可批量开通溯源与电子证书服务（接口预留）。"
-  }
-};
+const catalogApi = require("../../utils/catalogApi");
+const shopApi = require("../../utils/shopApi");
+const auth = require("../../utils/auth");
+const http = require("../../utils/http");
 
 Page({
   data: {
-    product: null
+    product: null,
+    loadError: ""
   },
 
   onLoad(options) {
     const id = options.id != null ? String(options.id) : "";
-    const product = CATALOG[id] || null;
-    this.setData({ product });
+    if (!id) {
+      this.setData({ loadError: "缺少商品 id" });
+      return;
+    }
+    this.loadProduct(id);
+  },
+
+  async loadProduct(id) {
+    this.setData({ loadError: "" });
+    try {
+      const product = await catalogApi.fetchMallProductDetail(id);
+      this.setData({ product });
+    } catch (e) {
+      this.setData({ loadError: "商品加载失败", product: null });
+    }
+  },
+
+  async ensureLogin() {
+    if (http.getStoredToken()) return true;
+    try {
+      await auth.silentLogin();
+      return !!http.getStoredToken();
+    } catch (e) {
+      wx.showToast({ title: "请先登录", icon: "none" });
+      return false;
+    }
+  },
+
+  async onAddCart() {
+    const p = this.data.product;
+    if (!p) return;
+    if (!(await this.ensureLogin())) return;
+    try {
+      await shopApi.addCartItem(p.id, 1);
+      wx.showToast({ title: "已加入购物车", icon: "success" });
+    } catch (e) {
+      /* toast */
+    }
+  },
+
+  async onBuyNow() {
+    const p = this.data.product;
+    if (!p) return;
+    if (!(await this.ensureLogin())) return;
+    wx.navigateTo({
+      url: `/pages/mall-checkout/index?mode=direct&productId=${encodeURIComponent(p.id)}&quantity=1`
+    });
+  },
+
+  goCart() {
+    wx.navigateTo({ url: "/pages/mall-cart/index" });
   },
 
   onShareAppMessage() {

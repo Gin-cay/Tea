@@ -2,7 +2,7 @@
  * 茶叶助农电子证书：官方模板底图 + 动态字段 + Canvas 导出。
  */
 const { parseTraceToken } = require("../../../utils/traceCrypto");
-const mock = require("../../../utils/redTraceMockData");
+const api = require("../../../utils/redTraceApi");
 const storage = require("../../../utils/redTraceStorage");
 const analytics = require("../../../utils/analytics");
 
@@ -23,24 +23,34 @@ Page({
       this.setData({ cert: null });
       return;
     }
-    const profile = mock.getGardenProfile(parsed.gardenId);
-    const list = storage.getTraceRecords();
-    const hit = list.find((r) => r.traceToken === token);
-    const gardenName = (hit && hit.gardenName) || (profile && profile.gardenName) || "认养茶园";
-    const farmerSign = profile && profile.farmer ? `${profile.farmer.name}（代签）` : "茶农委员会";
-    const app = getApp();
-    const u = (app && app.globalData && app.globalData.userInfo) || {};
-    const nick = u.nickName || "认养用户";
-    const d = new Date();
-    const cert = {
-      gardenName,
-      orderId: parsed.orderId,
-      holder: nick,
-      farmerSign,
-      dateStr: `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`
-    };
-    this.setData({ cert, traceToken: token });
-    analytics.track(analytics.EVENTS.RED_CERT_VIEW, { gardenId: parsed.gardenId });
+    wx.showLoading({ title: "加载中" });
+    api
+      .fetchGardenRedProfile(parsed.gardenId)
+      .then((profile) => {
+        const list = storage.getTraceRecords();
+        const hit = list.find((r) => r.traceToken === token);
+        const gardenName =
+          (hit && hit.gardenName) || (profile && profile.gardenName) || "认养茶园";
+        const farmerSign = profile && profile.farmer ? `${profile.farmer.name}（代签）` : "茶农委员会";
+        const app = getApp();
+        const u = (app && app.globalData && app.globalData.userInfo) || {};
+        const nick = u.nickName || "认养用户";
+        const d = new Date();
+        const cert = {
+          gardenName,
+          orderId: parsed.orderId,
+          holder: nick,
+          farmerSign,
+          dateStr: `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`
+        };
+        this.setData({ cert, traceToken: token });
+        analytics.track(analytics.EVENTS.RED_CERT_VIEW, { gardenId: parsed.gardenId });
+      })
+      .catch(() => {
+        wx.showToast({ title: "档案加载失败", icon: "none" });
+        this.setData({ cert: null });
+      })
+      .finally(() => wx.hideLoading());
   },
 
   onCertImageLoad() {
@@ -48,106 +58,62 @@ Page({
   },
 
   onReady() {
-    if (this.data.cert) {
-      this.initCanvasSize();
-    }
+    this.initCanvasSize();
   },
 
   initCanvasSize() {
-    if (!this.data.cert || this._canvasInited) return;
-    wx.getImageInfo({
-      src: CERT_BG,
-      success: (info) => {
-        const W = 375;
-        const H = Math.round((info.height / info.width) * W);
-        this._canvasInited = true;
-        this.setData({ canvasW: W, canvasH: H }, () => {
-          this.drawCertCanvas();
-        });
-      },
-      fail: () => {
-        this._canvasInited = true;
-        this.setData({ canvasW: 300, canvasH: 420 }, () => {
-          this.drawCertCanvas();
-        });
-      }
-    });
-  },
-
-  /**
-   * 绘制离屏证书（底图 + 文字），供 canvasToTempFilePath
-   */
-  drawCertCanvas(done) {
-    const c = this.data.cert;
-    if (!c) return;
-    const W = this.data.canvasW || 300;
-    const H = this.data.canvasH || 420;
-    const ctx = wx.createCanvasContext("certCanvas", this);
-    ctx.drawImage(CERT_BG, 0, 0, W, H);
-
-    const fs = Math.max(11, Math.floor(H / 38));
-    const lh = Math.floor(fs * 1.35);
-    let y = Math.floor(H * 0.57);
-    const cx = W / 2;
-    ctx.setTextAlign("center");
-    ctx.setFillStyle("rgba(245, 240, 216, 0.98)");
-    ctx.setFontSize(fs);
-    ctx.fillText(`持证人：${c.holder}`, cx, y);
-    y += lh;
-    ctx.fillText(`认养编号：${c.orderId}`, cx, y);
-    y += lh;
-    ctx.setFontSize(Math.max(10, fs - 1));
-    const gardenLine = `认养茶园：${c.gardenName}`;
-    ctx.fillText(gardenLine.length > 22 ? `${gardenLine.slice(0, 21)}…` : gardenLine, cx, y);
-    y += lh;
-    ctx.setFontSize(fs);
-    ctx.fillText(`签发日期：${c.dateStr}`, cx, y);
-
-    ctx.draw(false, () => {
-      if (typeof done === "function") done();
-    });
+    const query = wx.createSelectorQuery();
+    query
+      .select("#certStage")
+      .boundingClientRect((rect) => {
+        if (!rect) return;
+        const w = Math.floor(rect.width);
+        const h = Math.floor(rect.height);
+        this.setData({ canvasW: w, canvasH: h });
+      })
+      .exec();
   },
 
   onShareAppMessage() {
-    const t = encodeURIComponent(this.data.traceToken);
-    analytics.track(analytics.EVENTS.RED_CERT_SHARE, {});
+    const c = this.data.cert;
     return {
-      title: "我的茶叶助农电子证书",
-      path: `/pages/red-trace/certificate/index?traceToken=${t}`
+      title: c ? `${c.gardenName} · 电子认养证书` : "茶叶助农电子证书",
+      path: "/pages/red-trace/hub/index"
     };
   },
 
   onSaveImage() {
+    const cert = this.data.cert;
+    if (!cert) return;
     wx.showLoading({ title: "生成图片" });
-    this.drawCertCanvas(() => {
-      setTimeout(() => {
-        wx.canvasToTempFilePath(
-          {
-            canvasId: "certCanvas",
-            destWidth: (this.data.canvasW || 300) * 2,
-            destHeight: (this.data.canvasH || 420) * 2,
-            success: (res) => {
-              wx.hideLoading();
-              wx.saveImageToPhotosAlbum({
-                filePath: res.tempFilePath,
-                success: () => wx.showToast({ title: "已保存到相册", icon: "success" }),
-                fail: () => {
-                  wx.showModal({
-                    title: "需要相册权限",
-                    content: "请在设置中允许保存到相册后重试。",
-                    showCancel: false
-                  });
-                }
-              });
-            },
-            fail: () => {
-              wx.hideLoading();
-              wx.showToast({ title: "生成图片失败", icon: "none" });
-            }
+    const ctx = wx.createCanvasContext("certCanvas", this);
+    const w = this.data.canvasW;
+    const h = this.data.canvasH;
+    ctx.drawImage(CERT_BG, 0, 0, w, h);
+    ctx.setFillStyle("#1a3d2e");
+    ctx.setFontSize(Math.max(12, Math.floor(w * 0.045)));
+    ctx.fillText(`认养茶园：${cert.gardenName}`, w * 0.12, h * 0.42);
+    ctx.fillText(`订单号：${cert.orderId}`, w * 0.12, h * 0.5);
+    ctx.fillText(`持有人：${cert.holder}`, w * 0.12, h * 0.58);
+    ctx.fillText(`茶农签章：${cert.farmerSign}`, w * 0.12, h * 0.66);
+    ctx.setFontSize(Math.max(10, Math.floor(w * 0.035)));
+    ctx.fillText(cert.dateStr, w * 0.12, h * 0.78);
+    ctx.draw(false, () => {
+      wx.canvasToTempFilePath(
+        {
+          canvasId: "certCanvas",
+          success: (res) => {
+            wx.saveImageToPhotosAlbum({
+              filePath: res.tempFilePath,
+              success: () => wx.showToast({ title: "已保存到相册", icon: "success" }),
+              fail: () => wx.showToast({ title: "保存失败", icon: "none" })
+            });
           },
-          this
-        );
-      }, 120);
+          fail: () => wx.showToast({ title: "导出失败", icon: "none" }),
+          complete: () => wx.hideLoading()
+        },
+        this
+      );
     });
   }
 });

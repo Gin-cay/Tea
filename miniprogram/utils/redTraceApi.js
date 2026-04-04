@@ -1,42 +1,76 @@
 /**
- * 红色溯源后台接口预留层：统一封装 wx.request，便于替换为真实域名与鉴权。
- * 当前默认返回 null，由页面降级使用 redTraceMockData。
+ * 红色溯源、研学、季节孪生：真实接口封装。
  */
-
-const mock = require("./redTraceMockData");
+const http = require("./http");
 
 /**
  * @param {string} gardenId
- * @returns {Promise<object|null>}
+ * @returns {Promise<object>}
  */
 function fetchGardenRedProfile(gardenId) {
-  const app = getApp();
-  const base = (app && app.globalData && app.globalData.apiBaseUrl) || "";
-  if (!base || base.indexOf("your-api") >= 0) {
-    return Promise.resolve(mock.getGardenProfile(gardenId));
-  }
-  return new Promise((resolve) => {
-    wx.request({
-      url: `${base}/red-trace/garden/${encodeURIComponent(gardenId)}`,
-      method: "GET",
-      success: (res) => {
-        if (res.statusCode === 200 && res.data) resolve(res.data);
-        else resolve(mock.getGardenProfile(gardenId));
-      },
-      fail: () => resolve(mock.getGardenProfile(gardenId))
-    });
+  return http.request({
+    path: `/red-trace/garden/${encodeURIComponent(gardenId)}`,
+    method: "GET",
+    needAuth: false
+  });
+}
+
+function fetchStudySpots() {
+  return http.request({
+    path: "/red-trace/study/spots",
+    method: "GET",
+    needAuth: false
+  });
+}
+
+function fetchStudyRoutes() {
+  return http.request({
+    path: "/red-trace/study/routes",
+    method: "GET",
+    needAuth: false
   });
 }
 
 /**
- * 管理员更新红色故事（预留）
+ * @param {string} gardenId
  */
-function adminUpdateStory(payload) {
-  console.log("[redTraceApi] adminUpdateStory 预留", mock.ADMIN_API_STUB.stories, payload);
+function fetchSeasonTimeline(gardenId) {
+  return http.request({
+    path: `/garden/season-timeline/${encodeURIComponent(gardenId)}`,
+    method: "GET",
+    needAuth: false
+  });
+}
+
+/**
+ * @param {{ routeId: string, note?: string }} payload
+ */
+function submitStudyBooking(payload) {
+  return http.request({
+    path: "/api/red-study/booking",
+    method: "POST",
+    data: payload,
+    needAuth: true
+  });
+}
+
+/**
+ * @param {string} token
+ */
+function verifyTraceToken(token) {
+  return http.request({
+    path: "/api/trace/verify",
+    method: "POST",
+    data: { token },
+    needAuth: false
+  });
 }
 
 module.exports = {
   fetchGardenRedProfile,
-  adminUpdateStory,
-  ADMIN_API_STUB: mock.ADMIN_API_STUB
+  fetchStudySpots,
+  fetchStudyRoutes,
+  fetchSeasonTimeline,
+  submitStudyBooking,
+  verifyTraceToken
 };

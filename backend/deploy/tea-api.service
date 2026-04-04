@@ -1,0 +1,15 @@
+[Unit]
+Description=Tea Miniprogram FastAPI (uvicorn)
+After=network.target mariadb.service mysql.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/tea-backend
+EnvironmentFile=/opt/tea-backend/.env
+ExecStart=/opt/tea-backend/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --proxy-headers
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

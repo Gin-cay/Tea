@@ -6,6 +6,8 @@
       placeholder="搜索茶叶、礼盒、产地"
       value="{{keyword}}"
       bindinput="onKeywordInput"
+      confirm-type="search"
+      bindconfirm="onSearchConfirm"
     />
   </view>
 
@@ -23,9 +25,18 @@
     </view>
   </scroll-view>
 
+  <view class="card cart-entry-bar">
+    <text class="muted">购物车</text>
+    <button class="btn-cart" size="mini" bindtap="goCart">去结算</button>
+  </view>
+
   <view class="card">
     <block wx:for="{{products}}" wx:key="id">
-      <view class="product-item" data-id="{{item.id}}" bindtap="onTapProduct">
+      <view
+        class="product-item"
+        data-id="{{item.id}}"
+        bindtap="onTapProduct"
+      >
         <view class="thumb">
           <image class="thumb-img" src="{{item.cover}}" mode="aspectFill" />
         </view>

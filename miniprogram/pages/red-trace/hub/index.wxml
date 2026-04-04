@@ -60,7 +60,7 @@
   </view>
 
   <view class="card admin-hint muted">
-    管理端接口预留：故事 / 茶农 / 研学路线 → 见 utils/redTraceMockData.ADMIN_API_STUB
+    故事与研学数据由服务端接口提供；茶农照看见「实时照看」上传页。
   </view>
 </view>
 </page-background>

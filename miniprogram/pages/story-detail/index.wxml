@@ -3,10 +3,11 @@
   <view class="card" wx:if="{{story}}">
     <view class="section-title">{{story.title}}</view>
     <view class="story-meta muted">{{story.subtitle}}</view>
-    <view class="story-body">{{story.body}}</view>
+    <rich-text class="story-body" nodes="{{storyHtml}}" wx:if="{{storyHtml}}" />
+    <view class="story-body muted" wx:else>暂无正文</view>
   </view>
   <view class="card" wx:else>
-    <view class="muted">未找到对应故事，请从首页或列表进入。</view>
+    <view class="muted">{{loadError || "未找到对应故事，请从首页或列表进入。"}}</view>
   </view>
 </view>
 </page-background>

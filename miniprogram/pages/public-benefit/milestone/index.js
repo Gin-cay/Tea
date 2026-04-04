@@ -1,4 +1,5 @@
 const api = require("../../../utils/publicBenefitApi");
+const auth = require("../../../utils/auth");
 
 function toDisplayMilestone(item) {
   const percent = Math.min(100, Math.floor((item.currentAmount / item.targetAmount) * 100));
@@ -37,7 +38,7 @@ Page({
   },
 
   onLoad() {
-    this.loadOverview();
+    auth.silentLogin().catch(() => {}).finally(() => this.loadOverview());
   },
 
   async loadOverview() {
@@ -96,10 +97,12 @@ Page({
     try {
       const result = await api.redeemPoints({ goodsId, pointsCost: cost });
       if (result && result.success) {
+        const nextBal =
+          typeof result.balance === "number" ? result.balance : this.data.points.balance - cost;
         this.setData({
           points: {
             ...this.data.points,
-            balance: this.data.points.balance - cost
+            balance: nextBal
           }
         });
         wx.showModal({

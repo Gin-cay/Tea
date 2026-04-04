@@ -1,0 +1,55 @@
+.row-item {
+  display: flex;
+  gap: 16rpx;
+  align-items: flex-start;
+}
+
+.sel {
+  width: 48rpx;
+  padding-top: 40rpx;
+  font-size: 32rpx;
+  color: #2f8f3a;
+}
+
+.thumb {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 12rpx;
+  background: #e5e7eb;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.qty-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 12rpx;
+}
+
+.qty {
+  min-width: 48rpx;
+  text-align: center;
+}
+
+.del {
+  margin-left: auto;
+}
+
+.footer {
+  padding: 24rpx;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+}
+
+.btn-go {
+  background: #2f8f3a !important;
+  color: #fff !important;
+}

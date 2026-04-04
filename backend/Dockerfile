@@ -8,11 +8,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY server.py extensions.py models_community.py community_routes.py ./
+COPY app ./app
+COPY fixtures ./fixtures
 
 RUN mkdir -p /app/uploads
 
 ENV PORT=80
 EXPOSE 80
 
-CMD ["sh", "-c", "exec gunicorn --bind 0.0.0.0:${PORT:-80} --workers 2 --threads 4 --timeout 120 server:app"]
+CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-80} --workers 1"]

@@ -1,0 +1,35 @@
+<page-background>
+<view class="page">
+  <view class="card" wx:if="{{loadError}}">
+    <view class="muted">{{loadError}}</view>
+  </view>
+
+  <block wx:for="{{items}}" wx:key="id">
+    <view class="card row-item">
+      <view class="sel" data-id="{{item.id}}" bindtap="onToggleSelect">
+        <text wx:if="{{item.selected}}">☑</text>
+        <text wx:else>☐</text>
+      </view>
+      <image class="thumb" src="{{item.product.coverUrl}}" mode="aspectFill" />
+      <view class="info">
+        <view class="name">{{item.product.name}}</view>
+        <view class="muted">¥{{item.product.priceYuan}} × {{item.quantity}}</view>
+        <view class="qty-row">
+          <button size="mini" data-id="{{item.id}}" data-delta="-1" bindtap="onQtyChange">-</button>
+          <text class="qty">{{item.quantity}}</text>
+          <button size="mini" data-id="{{item.id}}" data-delta="1" bindtap="onQtyChange">+</button>
+          <button class="del" size="mini" data-id="{{item.id}}" bindtap="onDelete">删除</button>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view class="card" wx:if="{{!items.length && !loadError}}">
+    <view class="muted">购物车为空</view>
+  </view>
+
+  <view class="footer">
+    <button class="btn-go" bindtap="goCheckout">去结算</button>
+  </view>
+</view>
+</page-background>

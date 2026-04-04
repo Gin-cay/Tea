@@ -1,9 +1,8 @@
 <page-background>
 <view class="page">
-  <!-- 茶叶故事列表（占位）：后续可接云开发 / 接口 -->
   <view class="card">
     <view class="section-title">茶叶故事</view>
-    <view class="muted list-hint">以下为示例数据，可替换为接口返回列表。</view>
+    <view class="muted list-hint" wx:if="{{loadError}}">{{loadError}}</view>
     <block wx:for="{{list}}" wx:key="id">
       <view class="row" data-type="tea" data-id="{{item.id}}" bindtap="goDetail">
         <view>

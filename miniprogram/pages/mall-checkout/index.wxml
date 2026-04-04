@@ -1,0 +1,18 @@
+<page-background>
+<view class="page">
+  <view class="card">
+    <view class="section-title">收货信息</view>
+    <input class="inp" placeholder="收货人姓名" value="{{receiverName}}" bindinput="onNameInput" />
+    <input class="inp" type="number" placeholder="手机号" value="{{receiverPhone}}" bindinput="onPhoneInput" />
+    <picker mode="region" value="{{region}}" bindchange="onRegionChange">
+      <view class="inp picker-line">{{regionText || "点击选择省市区"}}</view>
+    </picker>
+    <textarea class="area" placeholder="详细地址（街道门牌）" value="{{address}}" bindinput="onAddressInput" />
+    <textarea class="area small" placeholder="备注（选填）" value="{{remark}}" bindinput="onRemarkInput" />
+  </view>
+
+  <view class="footer">
+    <button class="btn-submit" bindtap="onSubmit">提交订单</button>
+  </view>
+</view>
+</page-background>

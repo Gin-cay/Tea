@@ -1,11 +1,14 @@
 const storage = require("../../../utils/userProfileStorage");
+const http = require("../../../utils/http");
+const shopApi = require("../../../utils/shopApi");
+const auth = require("../../../utils/auth");
 
 Page({
   data: {
     redirect: "tab:home",
     returnUrl: "",
 
-    role: "customer", // customer | farmer
+    role: "customer",
     avatarUrl: "",
     phone: "",
     nickname: "",
@@ -30,6 +33,43 @@ Page({
       regionText: this.formatRegionText(region),
       addressDetail: (p.address && p.address.detail) || ""
     });
+    this.hydrateFromServer();
+  },
+
+  async hydrateFromServer() {
+    if (!http.getStoredToken()) {
+      try {
+        await auth.silentLogin();
+      } catch (e) {
+        return;
+      }
+    }
+    try {
+      const prof = await shopApi.getProfile();
+      if (!prof || !prof.phone) return;
+      const region = Array.isArray(prof.region) && prof.region.length === 3 ? prof.region : ["", "", ""];
+      const next = {
+        ...storage.ensureProfileBase(),
+        role: prof.role || "customer",
+        avatarUrl: prof.avatarUrl || "",
+        phone: prof.phone || "",
+        nickname: prof.nickname || "",
+        address: { region, detail: prof.addressDetail || "" },
+        updatedAt: Date.now()
+      };
+      storage.setProfile(next);
+      this.setData({
+        role: next.role,
+        avatarUrl: next.avatarUrl,
+        phone: next.phone,
+        nickname: next.nickname,
+        region,
+        regionText: this.formatRegionText(region),
+        addressDetail: next.address.detail || ""
+      });
+    } catch (e) {
+      /* 未登录或首次用户 */
+    }
   },
 
   formatRegionText(r) {
@@ -84,9 +124,22 @@ Page({
     this.setData({ addressDetail: v });
   },
 
-  onSubmit() {
+  async resolveAvatarUrl(path) {
+    if (!path) return "";
+    if (/^https?:\/\//i.test(path)) return path;
+    const data = await http.uploadFile({
+      path: "/api/community/upload",
+      filePath: path,
+      showLoading: true,
+      loadingTitle: "上传头像",
+      needAuth: true
+    });
+    return (data && data.url) || "";
+  },
+
+  async onSubmit() {
     const role = this.data.role;
-    const avatarUrl = String(this.data.avatarUrl || "").trim();
+    let avatarUrl = String(this.data.avatarUrl || "").trim();
     const phone = String(this.data.phone || "").trim();
     const nickname = String(this.data.nickname || "").trim();
     const region = this.data.region || [];
@@ -99,6 +152,38 @@ Page({
       return wx.showToast({ title: "请选择省市区", icon: "none" });
     if (!addressDetail) return wx.showToast({ title: "请输入详细地址", icon: "none" });
 
+    if (!http.getStoredToken()) {
+      try {
+        await auth.silentLogin();
+      } catch (e) {
+        wx.showToast({ title: "请先登录", icon: "none" });
+        return;
+      }
+    }
+
+    try {
+      avatarUrl = await this.resolveAvatarUrl(avatarUrl);
+      if (!avatarUrl) {
+        wx.showToast({ title: "头像上传失败", icon: "none" });
+        return;
+      }
+    } catch (e) {
+      return;
+    }
+
+    try {
+      await shopApi.putProfile({
+        nickname,
+        avatarUrl,
+        phone,
+        role,
+        region,
+        addressDetail
+      });
+    } catch (e) {
+      return;
+    }
+
     const prev = storage.ensureProfileBase();
     const next = {
       ...prev,
@@ -110,22 +195,20 @@ Page({
       updatedAt: Date.now()
     };
     storage.setProfile(next);
+    this.setData({ avatarUrl });
 
     wx.showToast({ title: "保存成功", icon: "success" });
 
-    // 根据角色进入对应首页
     const to = role === "farmer" ? "tab:farmer" : "tab:home";
     this.goAfterSubmit(to);
   },
 
   goAfterSubmit(target) {
-    // 若携带 returnUrl（例如支付页），优先回跳继续流程
     if (this.data.returnUrl) {
       wx.redirectTo({ url: this.data.returnUrl });
       return;
     }
 
-    // 否则进入对应首页
     const t = target || this.data.redirect || "tab:home";
 
     if (t === "tab:home") return wx.switchTab({ url: "/pages/home/index" });
@@ -134,8 +217,6 @@ Page({
     if (t === "tab:mine") return wx.switchTab({ url: "/pages/mine/index" });
     if (t === "tab:farmer") return wx.redirectTo({ url: "/pages/farmer/index" });
 
-    // 兜底
     wx.switchTab({ url: "/pages/home/index" });
   }
 });
-

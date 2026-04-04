@@ -1,34 +1,34 @@
-<page-background>
-<view class="page" wx:if="{{cert}}">
-  <view class="cert-frame">
-    <image
-      class="cert-bg"
-      src="/images/cert-tea-assist-official.png"
-      mode="widthFix"
-      bindload="onCertImageLoad"
-    ></image>
-    <view class="cert-overlay">
-      <view class="cert-field">持证人：{{cert.holder}}</view>
-      <view class="cert-field">认养编号：{{cert.orderId}}</view>
-      <view class="cert-field cert-field-sm">认养茶园：{{cert.gardenName}}</view>
-      <view class="cert-field">签发日期：{{cert.dateStr}}</view>
-    </view>
-  </view>
-
-  <!-- 离屏画布：与模板图比例一致，用于导出相册 -->
-  <canvas
-    canvas-id="certCanvas"
-    class="cert-canvas-hidden"
-    style="width: {{canvasW}}px; height: {{canvasH}}px;"
-  ></canvas>
-
-  <view class="card actions">
-    <button class="btn-green" open-type="share">分享证书</button>
-    <button class="btn-gold" bindtap="onSaveImage">保存证书图到相册</button>
-    <view class="muted small print-hint">打印：保存图片后通过手机相册或电脑打印，可作凭证留存。</view>
-  </view>
-</view>
-<view class="page" wx:else>
-  <view class="card muted">证书数据无效，请从认养记录进入。</view>
-</view>
-</page-background>
+<page-background>
+<view class="page" wx:if="{{cert}}">
+  <view class="cert-frame" id="certStage">
+    <image
+      class="cert-bg"
+      src="/images/cert-tea-assist-official.png"
+      mode="widthFix"
+      bindload="onCertImageLoad"
+    ></image>
+    <view class="cert-overlay">
+      <view class="cert-field">持证人：{{cert.holder}}</view>
+      <view class="cert-field">认养编号：{{cert.orderId}}</view>
+      <view class="cert-field cert-field-sm">认养茶园：{{cert.gardenName}}</view>
+      <view class="cert-field">签发日期：{{cert.dateStr}}</view>
+    </view>
+  </view>
+
+  <!-- 离屏画布：与模板图比例一致，用于导出相册 -->
+  <canvas
+    canvas-id="certCanvas"
+    class="cert-canvas-hidden"
+    style="width: {{canvasW}}px; height: {{canvasH}}px;"
+  ></canvas>
+
+  <view class="card actions">
+    <button class="btn-green" open-type="share">分享证书</button>
+    <button class="btn-gold" bindtap="onSaveImage">保存证书图到相册</button>
+    <view class="muted small print-hint">打印：保存图片后通过手机相册或电脑打印，可作凭证留存。</view>
+  </view>
+</view>
+<view class="page" wx:else>
+  <view class="card muted">证书数据无效，请从认养记录进入。</view>
+</view>
+</page-background>

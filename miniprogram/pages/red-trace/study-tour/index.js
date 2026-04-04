@@ -1,24 +1,33 @@
 /**
- * 红色茶旅研学：景点、路线、预约占位、认养积分兑换研学名额（演示）。
+ * 红色茶旅研学：景点、路线、预约、认养积分兑换。
  */
-const mock = require("../../../utils/redTraceMockData");
+const api = require("../../../utils/redTraceApi");
 const storage = require("../../../utils/redTraceStorage");
 const analytics = require("../../../utils/analytics");
+const auth = require("../../../utils/auth");
 
 Page({
   data: {
     spots: [],
     routes: [],
-    points: 0
+    points: 0,
+    loadError: ""
   },
 
   onShow() {
-    this.setData({
-      spots: mock.STUDY_SPOTS,
-      routes: mock.STUDY_ROUTES,
-      points: storage.getPoints()
-    });
+    this.setData({ points: storage.getPoints() });
+    this.loadData();
     analytics.track(analytics.EVENTS.RED_STUDY_VIEW, {});
+  },
+
+  async loadData() {
+    try {
+      const [spots, routes] = await Promise.all([api.fetchStudySpots(), api.fetchStudyRoutes()]);
+      this.setData({ spots: spots || [], routes: routes || [], loadError: "" });
+    } catch (e) {
+      this.setData({ loadError: "研学数据加载失败" });
+      wx.showToast({ title: "网络异常", icon: "none" });
+    }
   },
 
   onShareAppMessage() {
@@ -28,14 +37,28 @@ Page({
     };
   },
 
-  /** 预约接口预留：此处仅前端提示 */
-  onBook(e) {
+  async onBook(e) {
     const id = e.currentTarget.dataset.id;
-    wx.showModal({
-      title: "预约已登记（演示）",
-      content: `路线 ${id} 将提交至后台 POST /api/red-study/booking，请接入真实服务。`,
-      showCancel: false
-    });
+    if (!id) return;
+    try {
+      await auth.silentLogin();
+    } catch (err) {
+      wx.showToast({ title: "请先登录", icon: "none" });
+      return;
+    }
+    wx.showLoading({ title: "提交中" });
+    try {
+      await api.submitStudyBooking({ routeId: id, note: "" });
+      wx.showModal({
+        title: "预约已提交",
+        content: "我们已收到您的研学路线预约，工作人员将尽快联系您确认行程。",
+        showCancel: false
+      });
+    } catch (err) {
+      wx.showToast({ title: "预约失败，请重试", icon: "none" });
+    } finally {
+      wx.hideLoading();
+    }
   },
 
   onExchange(e) {
@@ -47,7 +70,7 @@ Page({
     }
     if (storage.spendPoints(need)) {
       analytics.track(analytics.EVENTS.RED_POINTS_EXCHANGE, { routeId: id, points: need });
-      wx.showToast({ title: "已兑换研学名额（演示）", icon: "success" });
+      wx.showToast({ title: "已兑换研学名额（本地积分已扣减）", icon: "success" });
       this.setData({ points: storage.getPoints() });
     }
   },

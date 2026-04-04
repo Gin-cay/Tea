@@ -1,9 +1,10 @@
 const { envList, cloudApiBaseUrl } = require("./envList");
+const auth = require("./utils/auth");
 
 const resolvedApiBaseUrl =
   cloudApiBaseUrl && String(cloudApiBaseUrl).trim().length > 0
     ? String(cloudApiBaseUrl).trim().replace(/\/$/, "")
-    : "http://127.0.0.1:5000";
+    : "http://127.0.0.1:8000";
 
 App({
   onLaunch() {
@@ -13,6 +14,9 @@ App({
         traceUser: true
       });
     }
+    auth.silentLogin().catch(() => {
+      /* 未配置微信 AppSecret 时静默失败，公益页仍可浏览 */
+    });
   },
   /**
    * 检查资料是否完整（不直接跳转）
@@ -26,16 +30,14 @@ App({
   },
 
   /**
-   * 仅在关键动作（如下单/支付）时强制完善资料：
-   * - incomplete -> 跳转完善页
-   * - complete   -> 返回 true
+   * 仅在关键动作（如下单/支付）时强制完善资料
    */
   ensureProfileBeforePay(options = {}) {
     const state = this.getProfileGateState();
     if (state && state.complete) return true;
 
     const redirect = options.redirect || "";
-    const returnUrl = options.returnUrl || ""; // 支付页回跳（可带参数）
+    const returnUrl = options.returnUrl || "";
     wx.navigateTo({
       url: `/pages/auth/profile/index?redirect=${encodeURIComponent(
         redirect
@@ -43,11 +45,24 @@ App({
     });
     return false;
   },
+
+  /**
+   * 茶农端上传等场景：资料不完整则跳转完善页（与 ensureProfileBeforePay 行为一致）
+   */
+  ensureProfileOrRedirect(options = {}) {
+    const state = this.getProfileGateState();
+    if (state && state.complete) return true;
+    const redirect = options.redirect || "";
+    wx.navigateTo({
+      url: `/pages/auth/profile/index?redirect=${encodeURIComponent(redirect)}`
+    });
+    return false;
+  },
   globalData: {
     userInfo: null,
     sessionStorageKey: "tea_adopt_user",
     apiBaseUrl: resolvedApiBaseUrl,
-    /** 溯源令牌签名密钥：务必改为服务端保管，与验签接口一致 */
+    /** 须与后端环境变量 TRACE_TOKEN_SECRET 一致 */
     traceTokenSecret: "TEA_RED_TRACE_DEV_SECRET_REPLACE"
   }
 });

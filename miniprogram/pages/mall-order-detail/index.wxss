@@ -1,0 +1,31 @@
+.row-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.no {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.status {
+  color: #2f8f3a;
+}
+
+.section {
+  margin-top: 24rpx;
+  margin-bottom: 8rpx;
+  font-weight: 600;
+}
+
+.line {
+  font-size: 26rpx;
+  margin: 6rpx 0;
+}
+
+.btn-cancel {
+  margin-top: 32rpx;
+  background: #fee2e2;
+  color: #991b1b;
+}

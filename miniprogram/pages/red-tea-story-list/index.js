@@ -1,21 +1,27 @@
+const catalogApi = require("../../utils/catalogApi");
+
 Page({
   data: {
-    list: [
-      {
-        id: "xinyang",
-        title: "信阳毛尖：大别山的红色茶韵",
-        desc: "革命老区与茶乡记忆"
-      },
-      {
-        id: "anxi",
-        title: "安溪铁观音：闽西苏区的茶乡记忆",
-        desc: "红色足迹与乌龙茶乡"
-      }
-    ]
+    list: [],
+    loadError: ""
+  },
+
+  onLoad() {
+    this.loadList();
+  },
+
+  async loadList() {
+    try {
+      const res = await catalogApi.fetchStoryList("red");
+      this.setData({ list: (res && res.list) || [], loadError: "" });
+    } catch (e) {
+      this.setData({ list: [], loadError: "加载失败" });
+    }
   },
 
   goDetail(e) {
     const { type, id } = e.currentTarget.dataset;
+    if (!type || !id) return;
     wx.navigateTo({
       url: `/pages/story-detail/index?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`
     });

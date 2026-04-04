@@ -1,7 +1,7 @@
 /**
  * 线下红色研学打卡：扫码或口令匹配景点，发放积分与勋章。
  */
-const mock = require("../../../utils/redTraceMockData");
+const api = require("../../../utils/redTraceApi");
 const storage = require("../../../utils/redTraceStorage");
 const analytics = require("../../../utils/analytics");
 
@@ -11,11 +11,25 @@ Page({
   data: {
     manualCode: "",
     medals: [],
-    checkinCount: 0
+    checkinCount: 0,
+    studySpots: []
+  },
+
+  onLoad() {
+    this.loadSpots();
   },
 
   onShow() {
     this.refreshMedals();
+  },
+
+  async loadSpots() {
+    try {
+      const spots = await api.fetchStudySpots();
+      this.setData({ studySpots: spots || [] });
+    } catch (e) {
+      wx.showToast({ title: "打卡点加载失败", icon: "none" });
+    }
   },
 
   refreshMedals() {
@@ -36,11 +50,13 @@ Page({
     this.setData({ manualCode: e.detail.value });
   },
 
-  /** 根据口令或扫码结果匹配景点 */
   resolveSpot(raw) {
     const code = (raw || "").trim();
     if (!code) return null;
-    return mock.STUDY_SPOTS.find((s) => code.indexOf(s.checkinCode) >= 0 || code === s.checkinCode) || null;
+    const spots = this.data.studySpots || [];
+    return (
+      spots.find((s) => code.indexOf(s.checkinCode) >= 0 || code === s.checkinCode) || null
+    );
   },
 
   completeCheckin(spot) {

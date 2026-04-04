@@ -1,22 +1,27 @@
+const catalogApi = require("../../utils/catalogApi");
+
 Page({
   data: {
-    list: [
-      {
-        id: "longjing",
-        title: "龙井：明前茶的千年传承",
-        desc: "江南春色与采摘时令中的茶文化"
-      },
-      {
-        id: "wuyi",
-        title: "武夷岩茶：岩骨花香的匠心工艺",
-        desc: "炭焙与做青里的制茶智慧"
-      }
-    ]
+    list: [],
+    loadError: ""
   },
 
-  /** 进入详情页，与首页 goStoryDetail 路由约定一致 */
+  onLoad() {
+    this.loadList();
+  },
+
+  async loadList() {
+    try {
+      const res = await catalogApi.fetchStoryList("tea");
+      this.setData({ list: (res && res.list) || [], loadError: "" });
+    } catch (e) {
+      this.setData({ list: [], loadError: "加载失败" });
+    }
+  },
+
   goDetail(e) {
     const { type, id } = e.currentTarget.dataset;
+    if (!type || !id) return;
     wx.navigateTo({
       url: `/pages/story-detail/index?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`
     });

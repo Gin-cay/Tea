@@ -1,0 +1,29 @@
+<page-background>
+<view class="page">
+  <view class="card" wx:if="{{loadError}}">
+    <view class="muted">{{loadError}}</view>
+  </view>
+
+  <view class="card" wx:if="{{order}}">
+    <view class="row-top">
+      <text class="no">{{order.orderNo}}</text>
+      <text class="status">{{order.status}}</text>
+    </view>
+    <view class="muted">金额：¥{{order.totalYuan}} · 运费 {{order.freightFen}} 分</view>
+    <view class="section">收货信息</view>
+    <view>{{order.receiverName}} {{order.receiverPhone}}</view>
+    <view class="muted">{{order.province}}{{order.city}}{{order.district}}{{order.address}}</view>
+    <view class="section">商品</view>
+    <block wx:for="{{order.items}}" wx:for-item="item" wx:for-index="idx" wx:key="idx">
+      <view class="line">{{item.productName}} × {{item.quantity}} · ¥{{item.priceYuan}}</view>
+    </block>
+    <button
+      wx:if="{{order.status === 'pending_pay'}}"
+      class="btn-cancel"
+      bindtap="onCancel"
+    >
+      取消订单
+    </button>
+  </view>
+</view>
+</page-background>

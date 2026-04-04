@@ -1,7 +1,8 @@
 /**
- * 微信云开发环境：填写 envId 后，app.js 会在 onLaunch 中 wx.cloud.init。
+ * 微信云开发：填写 envId 后，app.js 会在 onLaunch 中 wx.cloud.init。
  *
- * 云托管 / 自建 API 根地址（https，无末尾 /）。留空则 apiBaseUrl 使用本机 http://127.0.0.1:5000。
+ * 自建 API 根地址：https://你的域名（无末尾斜杠）。本地调试可写 http://127.0.0.1:8000
+ * 留空则 app.js 默认使用 http://127.0.0.1:8000（与 uvicorn 默认端口一致）
  */
 const cloudApiBaseUrl = "";
 
