@@ -11,3 +11,13 @@ cloudfunctions
 project.config.json
 project.private.config.json
 uploadCloudFunction.sh
+
+# 加快构建：镜像内不需要的目录勿打进上下文
+backend/legacy_flask
+backend/mall_api
+backend/deploy
+docs
+scripts
+**/*.png
+**/*.jpg
+**/*.jpeg
