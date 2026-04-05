@@ -169,6 +169,52 @@ class StudyBooking(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
+class StudyCheckinRecord(Base):
+    """研学线下打卡（服务端记录，与答题/证书关联）。"""
+
+    __tablename__ = "study_checkin_records"
+    __table_args__ = (UniqueConstraint("user_id", "spot_id", name="uq_study_checkin_user_spot"),)
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True, default=_rid)
+    user_id: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    spot_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    spot_name: Mapped[str] = mapped_column(String(200), default="")
+    checked_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class StudyQuizAttempt(Base):
+    """信阳毛尖研学答题记录（每场打卡一条）。"""
+
+    __tablename__ = "study_quiz_attempts"
+    __table_args__ = (UniqueConstraint("checkin_record_id", name="uq_study_quiz_one_per_checkin"),)
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True, default=_rid)
+    user_id: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    checkin_record_id: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    answers_json: Mapped[str] = mapped_column(Text, default="{}")
+    score: Mapped[int] = mapped_column(Integer, default=0)
+    max_score: Mapped[int] = mapped_column(Integer, default=3)
+    passed: Mapped[bool] = mapped_column(Boolean, default=False)
+    results_json: Mapped[str] = mapped_column(Text, default="[]")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class StudyQuizCertificate(Base):
+    """答题达标电子证书。"""
+
+    __tablename__ = "study_quiz_certificates"
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True, default=_rid)
+    user_id: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    checkin_record_id: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    quiz_attempt_id: Mapped[str] = mapped_column(String(32), unique=True, nullable=False, index=True)
+    cert_no: Mapped[str] = mapped_column(String(64), unique=True, nullable=False, index=True)
+    nickname: Mapped[str] = mapped_column(String(64), default="")
+    spot_id: Mapped[str] = mapped_column(String(64), default="")
+    spot_name: Mapped[str] = mapped_column(String(200), default="")
+    issued_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
 class PayOrder(Base):
     __tablename__ = "pay_orders"
 

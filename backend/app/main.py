@@ -24,6 +24,7 @@ from app.routers import (
     red_trace,
     shop,
     stories,
+    study_quiz,
     user_trace,
 )
 from app.seed import run_seed
@@ -80,6 +81,7 @@ def health():
 app.include_router(auth.router)
 app.include_router(public_benefit.router)
 app.include_router(red_trace.router)
+app.include_router(study_quiz.router)
 app.include_router(catalog.router)
 app.include_router(pay.router)
 app.include_router(community.router)

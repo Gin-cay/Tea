@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "电子证书",
+  "usingComponents": {
+    "page-background": "/components/page-background/index"
+  }
+}

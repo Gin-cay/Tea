@@ -1,12 +1,22 @@
+.page {
+  padding: 24rpx 24rpx 48rpx;
+  box-sizing: border-box;
+}
+
 .check-hero {
   display: flex;
   gap: 20rpx;
-  align-items: center;
+  align-items: flex-start;
   background: #fff;
   border-radius: 20rpx;
   padding: 24rpx;
   margin-bottom: 20rpx;
   border: 2rpx solid rgba(201, 48, 44, 0.2);
+}
+
+.check-hero-text {
+  flex: 1;
+  min-width: 0;
 }
 
 .check-hero-icon {
@@ -26,6 +36,110 @@
   font-size: 32rpx;
   font-weight: 600;
   margin-bottom: 6rpx;
+}
+
+.hero-quiz-hint {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #2f8f3a;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+/* 答题专区 */
+.quiz-card {
+  background: linear-gradient(160deg, #e8f5e9 0%, #fff 48%, #fff 100%);
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  border: 2rpx solid rgba(47, 143, 58, 0.35);
+  box-shadow: 0 8rpx 28rpx rgba(47, 143, 58, 0.12);
+}
+
+.quiz-card-head {
+  display: flex;
+  gap: 16rpx;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+}
+
+.quiz-card-icon {
+  width: 64rpx;
+  height: 64rpx;
+  line-height: 64rpx;
+  text-align: center;
+  background: linear-gradient(135deg, #2f8f3a, #4caf50);
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 800;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+}
+
+.quiz-card-head-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.quiz-card-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8rpx;
+}
+
+.quiz-card-desc {
+  font-size: 24rpx;
+  line-height: 1.45;
+}
+
+.btn-quiz-main {
+  margin: 0;
+  width: 100%;
+  height: 92rpx;
+  line-height: 92rpx;
+  background: linear-gradient(135deg, #2f8f3a, #43a047);
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
+  border-radius: 16rpx;
+  border: none;
+  box-shadow: 0 6rpx 20rpx rgba(47, 143, 58, 0.35);
+}
+
+.btn-quiz-main::after {
+  border: none;
+}
+
+.quiz-status {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.quiz-status.ok {
+  color: #2f8f3a;
+  font-weight: 500;
+}
+
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  border: 2rpx solid rgba(0, 0, 0, 0.04);
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 20rpx;
+}
+
+.card-checkin .section-title {
+  margin-bottom: 16rpx;
 }
 
 .btn-scan-big {
@@ -85,4 +199,17 @@
 .medal-icon {
   color: #e1583f;
   font-size: 32rpx;
+}
+
+.muted {
+  color: #6b7280;
+}
+
+.small {
+  font-size: 24rpx;
+}
+
+.footer-stats {
+  text-align: center;
+  line-height: 1.5;
 }

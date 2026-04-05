@@ -1,0 +1,24 @@
+<page-background>
+<view class="page" wx:if="{{loaded}}">
+  <view class="cert-preview">
+    <view class="cert-border">
+      <view class="cert-ribbon">信阳毛尖文化研学</view>
+      <view class="cert-h1">电 子 证 书</view>
+      <view class="cert-line" />
+      <view class="cert-row"><text class="k">获得者</text><text class="v">{{nickname}}</text></view>
+      <view class="cert-row"><text class="k">证书编号</text><text class="v mono">{{certNo}}</text></view>
+      <view class="cert-row"><text class="k">打卡时间</text><text class="v">{{checkinAtText}}</text></view>
+      <view class="cert-row" wx:if="{{spotName}}"><text class="k">打卡景点</text><text class="v">{{spotName}}</text></view>
+      <view class="cert-row"><text class="k">颁发时间</text><text class="v">{{issuedAtText}}</text></view>
+      <view class="cert-footer muted">茶叶助农 · 红色茶旅研学项目</view>
+    </view>
+  </view>
+
+  <canvas type="2d" id="certCanvas" class="cert-canvas-hidden"></canvas>
+
+  <view class="actions">
+    <button class="btn-save" bindtap="onSaveImage">保存到相册</button>
+    <button class="btn-share" open-type="share">分享给好友</button>
+  </view>
+</view>
+</page-background>

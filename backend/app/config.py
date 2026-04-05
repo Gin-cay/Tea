@@ -49,6 +49,9 @@ class Settings(BaseSettings):
     # 管理端 CRUD：请求头 X-Admin-Token；留空则管理接口全部 403
     admin_token: str = ""
 
+    # 研学答题：满分 3，得分 ≥ 此值则颁发电子证书（可用环境变量 STUDY_QUIZ_PASS_MIN_SCORE=3 要求全对）
+    study_quiz_pass_min_score: int = 2
+
 
 @lru_cache
 def get_settings() -> Settings:

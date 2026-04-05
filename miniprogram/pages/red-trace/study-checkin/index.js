@@ -4,6 +4,8 @@
 const api = require("../../../utils/redTraceApi");
 const storage = require("../../../utils/redTraceStorage");
 const analytics = require("../../../utils/analytics");
+const auth = require("../../../utils/auth");
+const studyQuizApi = require("../../../utils/studyQuizApi");
 
 const MEDAL_FIRST = "红色茶旅先锋";
 
@@ -62,7 +64,17 @@ Page({
   completeCheckin(spot) {
     const list = storage.getCheckins();
     if (list.indexOf(spot.id) >= 0) {
-      wx.showToast({ title: "此处已打卡", icon: "none" });
+      wx.showModal({
+        title: "此处已打卡",
+        content: "您已在本景点打卡过。仍可参加信阳毛尖知识问答并领取电子证书。",
+        confirmText: "开始答题",
+        cancelText: "知道了",
+        success: (res) => {
+          if (res.confirm) {
+            this.goQuizAfterCheckin(spot);
+          }
+        }
+      });
       return;
     }
     storage.addCheckin(spot.id);
@@ -71,10 +83,39 @@ Page({
     analytics.track(analytics.EVENTS.RED_CHECKIN, { spotId: spot.id, points: spot.pointsReward });
     wx.showModal({
       title: "打卡成功",
-      content: `获得积分 +${spot.pointsReward}，已解锁勋章「${MEDAL_FIRST}」`,
-      showCancel: false
+      content: `获得积分 +${spot.pointsReward}，已解锁勋章「${MEDAL_FIRST}」。是否参加信阳毛尖知识问答并领取电子证书？`,
+      confirmText: "开始答题",
+      cancelText: "稍后",
+      success: (res) => {
+        if (res.confirm) {
+          this.goQuizAfterCheckin(spot);
+        }
+      }
     });
     this.refreshMedals();
+  },
+
+  goQuizAfterCheckin(spot) {
+    wx.showLoading({ title: "准备中", mask: true });
+    auth
+      .silentLogin()
+      .then(() => studyQuizApi.syncCheckin({ spotId: spot.id }))
+      .then((body) => {
+        wx.hideLoading();
+        const cid = body && body.checkinRecordId;
+        if (!cid) {
+          wx.showToast({ title: "同步打卡失败", icon: "none" });
+          return;
+        }
+        const name = encodeURIComponent(spot.name || "");
+        wx.navigateTo({
+          url: `/pages/quiz/quiz?checkinRecordId=${cid}&spotName=${name}`
+        });
+      })
+      .catch(() => {
+        wx.hideLoading();
+        wx.showToast({ title: "请先登录后再答题", icon: "none" });
+      });
   },
 
   onScan() {
@@ -99,5 +140,37 @@ Page({
       return;
     }
     this.completeCheckin(spot);
+  },
+
+  /**
+   * 页内入口：已打卡用户若上次点了「稍后」，可由此进入答题
+   */
+  onOpenQuizEntry() {
+    const ids = storage.getCheckins();
+    if (!ids.length) {
+      wx.showToast({ title: "请先完成至少一次打卡", icon: "none" });
+      return;
+    }
+    const spots = this.data.studySpots || [];
+    const checkedSpots = ids
+      .map((id) => spots.find((s) => s.id === id))
+      .filter(Boolean);
+    if (!checkedSpots.length) {
+      wx.showToast({ title: "打卡点数据加载中，请稍后重试", icon: "none" });
+      return;
+    }
+    if (checkedSpots.length === 1) {
+      this.goQuizAfterCheckin(checkedSpots[0]);
+      return;
+    }
+    wx.showActionSheet({
+      itemList: checkedSpots.map((s) => s.name || s.id),
+      success: (res) => {
+        const spot = checkedSpots[res.tapIndex];
+        if (spot) {
+          this.goQuizAfterCheckin(spot);
+        }
+      }
+    });
   }
 });

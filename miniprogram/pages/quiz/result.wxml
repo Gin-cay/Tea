@@ -1,0 +1,25 @@
+<page-background>
+<view class="page" wx:if="{{loaded}}">
+  <view class="score-card">
+    <view class="score-num">{{score}}<text class="score-max"> / {{maxScore}}</text></view>
+    <view class="score-desc">{{passed ? '恭喜达标！' : '未达颁发证书标准'}}</view>
+    <view class="pass-line muted" wx:if="{{passMinScore}}">及格线：答对 ≥ {{passMinScore}} 题</view>
+  </view>
+
+  <view class="section-title">答题明细</view>
+  <view class="card" wx:for="{{results}}" wx:key="questionId">
+    <view class="row-top">
+      <text class="tag {{item.correct ? 'ok' : 'bad'}}">{{item.correct ? '正确' : '错误'}}</text>
+      <text class="q-mini">{{item.question}}</text>
+    </view>
+    <view class="line muted">你的答案：{{item.yourAnswer}}</view>
+    <view class="line" wx:if="{{!item.correct}}">正确答案：{{item.correctAnswer}}</view>
+    <view class="analysis" wx:if="{{item.analysis}}">{{item.analysis}}</view>
+  </view>
+
+  <view class="btns">
+    <button wx:if="{{passed && certificateId}}" class="btn-primary" bindtap="goCertificate">查看电子证书</button>
+    <button class="btn-ghost" bindtap="goBackCheckin">返回打卡页</button>
+  </view>
+</view>
+</page-background>

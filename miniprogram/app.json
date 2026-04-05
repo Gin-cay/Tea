@@ -12,6 +12,9 @@
     "pages/public-benefit/milestone/index",
     "pages/red-trace/study-tour/index",
     "pages/red-trace/study-checkin/index",
+    "pages/quiz/quiz",
+    "pages/quiz/result",
+    "pages/certificate/certificate",
     "pages/mall-product-detail/index",
     "pages/mall-cart/index",
     "pages/mall-checkout/index",
@@ -60,5 +63,10 @@
     ]
   },
   "sitemapLocation": "sitemap.json",
-  "style": "v2"
+  "style": "v2",
+  "permission": {
+    "scope.writePhotosAlbum": {
+      "desc": "用于将研学电子证书保存到手机相册"
+    }
+  }
 }

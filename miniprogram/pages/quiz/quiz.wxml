@@ -1,0 +1,34 @@
+<page-background>
+<view class="page">
+  <view class="quiz-head">
+    <view class="quiz-title">信阳毛尖 · 研学小测</view>
+    <view class="quiz-meta muted" wx:if="{{spotName}}">打卡点：{{spotName}}</view>
+    <view class="timer" wx:if="{{questions.length}}">剩余时间 {{remainSec}} 秒</view>
+  </view>
+
+  <view wx:if="{{!questions.length}}" class="card muted">题目加载中…</view>
+
+  <block wx:for="{{questions}}" wx:key="id">
+    <view class="card q-card">
+      <view class="q-no">第 {{index + 1}} / {{questions.length}} 题</view>
+      <view class="q-text">{{item.question}}</view>
+      <view
+        class="opt {{answers[item.id] === opt ? 'opt-on' : ''}}"
+        wx:for="{{item.options}}"
+        wx:for-item="opt"
+        wx:key="*this"
+        data-qid="{{item.id}}"
+        data-val="{{opt}}"
+        bindtap="onPick"
+      >
+        <text class="opt-dot">{{answers[item.id] === opt ? '●' : '○'}}</text>
+        <text>{{opt}}</text>
+      </view>
+    </view>
+  </block>
+
+  <view class="footer-actions" wx:if="{{questions.length}}">
+    <button class="btn-submit-quiz" bindtap="onSubmit" disabled="{{submitting}}">提交答卷</button>
+  </view>
+</view>
+</page-background>

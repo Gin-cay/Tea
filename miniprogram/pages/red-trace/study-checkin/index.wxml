@@ -2,13 +2,31 @@
 <view class="page">
   <view class="check-hero">
     <text class="check-hero-icon">卡</text>
-    <view>
+    <view class="check-hero-text">
       <view class="check-hero-title">红色景点打卡</view>
       <view class="muted small">扫描景点物料二维码，或手动输入打卡口令</view>
+      <view class="hero-quiz-hint">打卡成功后可参加「信阳毛尖」问答，达标领取电子证书</view>
     </view>
   </view>
 
-  <view class="card">
+  <!-- 答题入口（固定显眼区域，不依赖是否滚到口令区） -->
+  <view class="quiz-card">
+    <view class="quiz-card-head">
+      <text class="quiz-card-icon">答</text>
+      <view class="quiz-card-head-text">
+        <view class="quiz-card-title">研学知识问答 · 电子证书</view>
+        <view class="quiz-card-desc muted">共 3 题，成绩达标即可生成证书，支持保存相册与微信分享</view>
+      </view>
+    </view>
+    <button class="btn-quiz-main" bindtap="onOpenQuizEntry">进入答题 · 领电子证书</button>
+    <view wx:if="{{checkinCount > 0}}" class="quiz-status ok">
+      已打卡 {{checkinCount}} 处景点，可直接进入答题
+    </view>
+    <view wx:else class="quiz-status muted">请先完成下方打卡后再答题</view>
+  </view>
+
+  <view class="card card-checkin">
+    <view class="section-title">景点打卡</view>
     <button class="btn-scan-big" bindtap="onScan">扫一扫打卡</button>
     <view class="or muted">或</view>
     <input
@@ -29,7 +47,7 @@
     </view>
   </view>
 
-  <view class="card muted small">
+  <view class="card muted small footer-stats">
     已打卡景点数：{{checkinCount}} · 累计获得积分以研学页为准
   </view>
 </view>
