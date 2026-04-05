@@ -13,10 +13,10 @@
   <view class="card">
     <view class="section-title">订单中心</view>
     <view class="order-grid">
-      <view class="order-item">待付款</view>
-      <view class="order-item">待发货</view>
-      <view class="order-item">待收货</view>
-      <view class="order-item">售后</view>
+      <view class="order-item" bindtap="onOrderTabTap" data-tab="pay">待付款</view>
+      <view class="order-item" bindtap="onOrderTabTap" data-tab="ship">待发货</view>
+      <view class="order-item" bindtap="onOrderTabTap" data-tab="recv">待收货</view>
+      <view class="order-item" bindtap="onOrderTabTap" data-tab="after">售后</view>
     </view>
   </view>
 
@@ -27,8 +27,7 @@
         wx:if="{{item.title !== '数据说明' && item.title !== '云服务自检'}}"
         class="menu-item"
         bindtap="onMenuTap"
-        data-url="{{item.url}}"
-        data-needcert="{{item.needCert}}"
+        data-index="{{index}}"
       >
         <view class="menu-row">
           <text wx:if="{{item.badge}}" class="menu-red-tag">{{item.badge}}</text>

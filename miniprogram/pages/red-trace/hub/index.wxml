@@ -21,6 +21,13 @@
   </view>
 
   <view class="card">
+    <view class="section-title">企业生产溯源</view>
+    <view class="muted hint">茶叶批次各环节（采摘/加工等）现场拍照上报；需在「我的」出现入口或已分配溯源角色。茶农日常照看请用下方「实时照看」。</view>
+    <button class="btn-workflow" bindtap="goBatchTraceReport">批次溯源上报 · 上传图片</button>
+    <button class="btn-workflow btn-workflow--sub" bindtap="goFarmerCare">茶农工作台 · 实时照看</button>
+  </view>
+
+  <view class="card">
     <view class="section-title">快捷服务</view>
     <view class="quick-grid">
       <view class="quick-item quick-item--red" bindtap="goStudy">
@@ -60,7 +67,7 @@
   </view>
 
   <view class="card admin-hint muted">
-    故事与研学数据由服务端接口提供；茶农照看见「实时照看」上传页。
+    认养溯源码与「批次溯源上报」为不同体系；后者用于企业生产批次全链路留痕。
   </view>
 </view>
 </page-background>

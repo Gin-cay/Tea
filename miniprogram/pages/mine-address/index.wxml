@@ -1,0 +1,27 @@
+<page-background>
+<view class="page">
+  <view class="card">
+    <view class="section-title">收货地址</view>
+    <view class="muted hint">与「完善资料」共用后端接口，修改后下单将默认使用此处地址（下单页仍可改）。</view>
+
+    <view class="label">省市区</view>
+    <picker mode="region" value="{{region}}" bindchange="onRegionChange">
+      <view class="picker">
+        <text class="{{regionText ? '' : 'placeholder'}}">{{regionText || '请选择省市区'}}</text>
+        <text class="arrow">›</text>
+      </view>
+    </picker>
+
+    <view class="label mt">详细地址</view>
+    <textarea
+      class="area"
+      placeholder="街道、门牌号、小区楼栋等"
+      value="{{addressDetail}}"
+      maxlength="255"
+      bindinput="onDetailInput"
+    />
+
+    <button class="primary-btn" bindtap="onSave" disabled="{{saving}}">保存</button>
+  </view>
+</view>
+</page-background>

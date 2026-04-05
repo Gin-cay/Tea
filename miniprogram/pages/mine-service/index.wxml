@@ -1,0 +1,31 @@
+<page-background>
+<view class="page">
+  <view class="card">
+    <view class="section-title">联系我们</view>
+    <view class="row">
+      <text class="k">客服电话</text>
+      <text class="v" selectable>{{service.phone}}</text>
+    </view>
+    <button class="btn-line" bindtap="onCall">一键拨打</button>
+
+    <view class="row mt">
+      <text class="k">微信客服号</text>
+      <text class="v" selectable>{{service.wechat}}</text>
+    </view>
+    <button class="btn-line" bindtap="onCopyWechat">复制微信号</button>
+
+    <view class="row mt">
+      <text class="k">服务时间</text>
+      <text class="v">{{service.hours}}</text>
+    </view>
+
+    <view class="notice muted">{{service.notice}}</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">在线客服</view>
+    <view class="muted hint">若已在公众平台绑定小程序客服，可使用下方按钮发起会话。</view>
+    <button class="btn-primary" open-type="contact">打开微信客服会话</button>
+  </view>
+</view>
+</page-background>

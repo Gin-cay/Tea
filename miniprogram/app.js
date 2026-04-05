@@ -4,7 +4,7 @@ const auth = require("./utils/auth");
 const resolvedApiBaseUrl =
   cloudApiBaseUrl && String(cloudApiBaseUrl).trim().length > 0
     ? String(cloudApiBaseUrl).trim().replace(/\/$/, "")
-    : "http://127.0.0.1:8000";
+    : "http://127.0.0.1:5000";
 
 App({
   onLaunch() {
@@ -63,6 +63,13 @@ App({
     sessionStorageKey: "tea_adopt_user",
     apiBaseUrl: resolvedApiBaseUrl,
     /** 须与后端环境变量 TRACE_TOKEN_SECRET 一致 */
-    traceTokenSecret: "TEA_RED_TRACE_DEV_SECRET_REPLACE"
+    traceTokenSecret: "TEA_RED_TRACE_DEV_SECRET_REPLACE",
+    /** 「我的-客服中心」展示用，可按企业实际修改 */
+    customerService: {
+      phone: "400-000-0000",
+      wechat: "tea_help_demo",
+      hours: "工作日 9:00-18:00",
+      notice: "咨询订单、物流时请准备好订单号；茶农端生产溯源请在「溯源数据上报」联系管理员分配权限。"
+    }
   }
 });

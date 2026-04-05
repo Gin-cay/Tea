@@ -81,6 +81,14 @@ Page({
     });
   },
 
+  goBatchTraceReport() {
+    wx.navigateTo({ url: "/pages/trace-report/index" });
+  },
+
+  goFarmerCare() {
+    wx.navigateTo({ url: "/pages/farmer/index" });
+  },
+
   goStudy() {
     wx.navigateTo({ url: "/pages/red-trace/study-tour/index" });
   },

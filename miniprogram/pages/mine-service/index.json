@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "客服中心",
+  "usingComponents": {
+    "page-background": "/components/page-background/index"
+  }
+}

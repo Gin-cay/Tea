@@ -1,0 +1,53 @@
+.page {
+  padding: 24rpx;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.cover {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+  background: #f0f0f0;
+}
+
+.meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.price {
+  font-size: 30rpx;
+  color: #c9302c;
+  font-weight: 600;
+}
+
+.del {
+  font-size: 24rpx;
+  color: #888;
+  padding: 12rpx;
+}
+
+.btn {
+  margin-top: 24rpx;
+  background: #2f8f3a;
+  color: #fff;
+  border-radius: 12rpx;
+}
+
+.muted {
+  color: #666;
+  font-size: 28rpx;
+  line-height: 1.5;
+}

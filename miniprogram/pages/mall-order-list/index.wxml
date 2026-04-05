@@ -1,5 +1,9 @@
 <page-background>
 <view class="page">
+  <view class="card" wx:if="{{filterHint}}">
+    <view class="muted small">{{filterHint}}</view>
+  </view>
+
   <view class="card" wx:if="{{loadError}}">
     <view class="muted">{{loadError}}</view>
   </view>

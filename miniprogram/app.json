@@ -32,6 +32,9 @@
     "pages/mall/index",
     "pages/trace-report/index",
     "pages/trace-report/my",
+    "pages/mine-favorites/index",
+    "pages/mine-address/index",
+    "pages/mine-service/index",
     "pages/mine/index"
   ],
   "window": {

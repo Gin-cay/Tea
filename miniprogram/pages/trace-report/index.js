@@ -72,34 +72,80 @@ Page({
   },
 
   onChooseImage() {
-    wx.chooseMedia({
-      count: 6 - this.data.images.length,
-      mediaType: ["image"],
-      success: (res) => {
-        const files = (res.tempFiles || []).map((f) => f.tempFilePath);
-        this._uploadImages(files);
-      }
-    });
+    const max = 6 - this.data.images.length;
+    if (max <= 0) return;
+    if (wx.chooseMedia) {
+      wx.chooseMedia({
+        count: max,
+        mediaType: ["image"],
+        success: (res) => {
+          const files = (res.tempFiles || []).map((f) => f.tempFilePath).filter(Boolean);
+          this._uploadImages(files);
+        },
+        fail: (e) => {
+          const msg = (e && e.errMsg) || "";
+          if (msg.indexOf("cancel") >= 0 || msg.indexOf("取消") >= 0) return;
+          wx.showToast({ title: "选图失败，可重试", icon: "none" });
+        }
+      });
+    } else {
+      wx.chooseImage({
+        count: max,
+        sizeType: ["compressed"],
+        sourceType: ["album", "camera"],
+        success: (res) => {
+          this._uploadImages(res.tempFilePaths || []);
+        }
+      });
+    }
   },
 
   _uploadImages(paths) {
     if (!paths.length) return;
-    if (!http.getBaseUrl()) {
-      wx.showToast({ title: "未配置 apiBaseUrl", icon: "none" });
+    const base = http.getBaseUrl();
+    if (!base) {
+      wx.showToast({ title: "未配置 API 地址：请改 envList.js 中 cloudApiBaseUrl", icon: "none" });
       return;
     }
     let promise = Promise.resolve(this.data.images.slice());
     paths.forEach((filePath) => {
       promise = promise.then((urls) =>
         http
-          .uploadFile({ filePath, showLoading: true, loadingTitle: "上传中" })
+          .uploadFile({
+            filePath,
+            path: "/api/community/upload",
+            showLoading: true,
+            loadingTitle: "上传中",
+            showError: false
+          })
           .then((data) => {
             const u = (data && data.url) || "";
-            return u ? urls.concat([u]) : urls;
+            if (!u) {
+              return Promise.reject(new Error("服务器未返回图片地址"));
+            }
+            return urls.concat([u]);
           })
       );
     });
-    promise.then((urls) => this.setData({ images: urls })).catch(() => {});
+    promise
+      .then((urls) => {
+        this.setData({ images: urls });
+        wx.showToast({ title: "图片已上传", icon: "success" });
+      })
+      .catch((err) => {
+        let msg = "上传失败";
+        if (err && err.statusCode === 403) msg = "无权限或接口拒绝";
+        else if (err && err.statusCode === 404) msg = "上传接口不存在，检查 API 地址与端口";
+        else if (err && err.message) msg = String(err.message).slice(0, 36);
+        else if (err && err.errMsg) msg = String(err.errMsg).slice(0, 36);
+        wx.showModal({
+          title: "溯源图片上传失败",
+          content:
+            msg +
+            "\n\n请确认：1) 后端已启动且端口与小程序 apiBaseUrl 一致；2) 开发者工具已勾选「不校验合法域名」；3) 真机使用局域网 IP 非 127.0.0.1。",
+          showCancel: false
+        });
+      });
   },
 
   onPreview(e) {

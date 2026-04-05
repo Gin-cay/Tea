@@ -38,6 +38,10 @@
   padding: 16rpx 0;
 }
 
+.order-item:active {
+  opacity: 0.85;
+}
+
 .menu-item {
   display: flex;
   justify-content: space-between;
