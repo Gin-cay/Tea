@@ -1,0 +1,17 @@
+<page-background>
+<view class="page">
+  <view wx:if="{{loading}}" class="muted">加载中…</view>
+  <view wx:elif="{{!list.length}}" class="muted">暂无上报记录</view>
+  <block wx:for="{{list}}" wx:key="id">
+    <view class="card">
+      <view class="row-top">
+        <text class="tag">{{item.processLabel}}</text>
+        <text class="audit audit-{{item.auditStatus}}">{{item.auditText}}</text>
+      </view>
+      <view class="batch">批次 {{item.batchId}}</view>
+      <view class="sum">{{item.summary}}</view>
+      <view class="time">{{item.submitTime}}</view>
+    </view>
+  </block>
+</view>
+</page-background>

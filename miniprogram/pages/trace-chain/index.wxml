@@ -1,0 +1,141 @@
+<page-background>
+<view class="page">
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="state-card">
+    <text class="muted">正在加载溯源信息…</text>
+  </view>
+
+  <view wx:elif="{{loadError}}" class="state-card">
+    <text class="err-text">{{loadError}}</text>
+    <button class="btn-retry" bindtap="onRetry">重试</button>
+  </view>
+
+  <block wx:else>
+    <!-- 顶部：产品大图 + 溯源编号 -->
+    <view class="hero-card">
+      <image
+        class="hero-img"
+        src="{{product.coverImage}}"
+        mode="aspectFill"
+        wx:if="{{product.coverImage}}"
+      />
+      <view class="hero-fallback" wx:else>信阳毛尖</view>
+      <view class="hero-mask">
+        <view class="hero-title">{{product.name}}</view>
+        <view class="hero-sub">{{product.brief}}</view>
+        <view class="trace-no-row">
+          <text class="trace-label">唯一溯源编号</text>
+          <text class="trace-value" user-select>{{traceNo}}</text>
+        </view>
+        <view class="hero-meta">
+          <text wx:if="{{product.grade}}">{{product.grade}}</text>
+          <text wx:if="{{product.spec}}" class="dot">·</text>
+          <text wx:if="{{product.spec}}">{{product.spec}}</text>
+          <text wx:if="{{product.productionDate}}" class="dot">·</text>
+          <text wx:if="{{product.productionDate}}">生产日期 {{product.productionDate}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 时间线：全流程监控 -->
+    <view class="section-head">
+      <text class="section-title">全流程监控记录</text>
+      <text class="section-tip">点击条目展开详情、图片与视频</text>
+    </view>
+
+    <view class="timeline-wrap">
+      <block wx:for="{{nodes}}" wx:key="key" wx:for-index="idx">
+        <view class="timeline-item">
+          <view class="timeline-axis">
+            <view class="axis-dot {{item.expanded ? 'on' : ''}}"></view>
+            <view class="axis-line" wx:if="{{idx < nodes.length - 1}}"></view>
+          </view>
+          <view class="timeline-body">
+            <view class="node-card" bindtap="toggleNode" data-index="{{idx}}">
+              <view class="node-head">
+                <view class="node-title-row">
+                  <text class="node-step">{{idx + 1}}</text>
+                  <text class="node-title">{{item.title}}</text>
+                </view>
+                <text class="node-time">{{item.time}}</text>
+                <text class="node-arrow">{{item.expanded ? '∧' : '∨'}}</text>
+              </view>
+              <view class="node-summary">{{item.summary}}</view>
+            </view>
+
+            <!-- 展开：详情 -->
+            <view class="node-detail" wx:if="{{item.expanded}}">
+              <view class="field-row" wx:for="{{item.fields}}" wx:key="label" wx:for-item="f">
+                <text class="field-label">{{f.label}}</text>
+                <text class="field-value">{{f.value}}</text>
+              </view>
+
+              <!-- 加工子工序 -->
+              <view class="sub-wrap" wx:if="{{item.subSteps.length}}">
+                <view class="sub-title">工序明细</view>
+                <view class="sub-step" wx:for="{{item.subSteps}}" wx:key="name" wx:for-item="st">
+                  <view class="sub-name">{{st.name}}</view>
+                  <view class="sub-meta">{{st.time}} · {{st.operator}}</view>
+                  <view class="sub-remark">{{st.remark}}</view>
+                </view>
+              </view>
+
+              <!-- 图片 -->
+              <view class="media-wrap" wx:if="{{item.images.length}}">
+                <view class="media-title">现场照片</view>
+                <view class="img-grid">
+                  <image
+                    wx:for="{{item.images}}"
+                    wx:key="*this"
+                    wx:for-item="img"
+                    class="thumb"
+                    src="{{img}}"
+                    mode="aspectFill"
+                    bindtap="previewImage"
+                    data-node-index="{{idx}}"
+                    data-src="{{img}}"
+                  />
+                </view>
+              </view>
+
+              <!-- 视频 -->
+              <view class="media-wrap" wx:if="{{item.videos.length}}">
+                <view class="media-title">视频记录</view>
+                <block wx:for="{{item.videos}}" wx:for-index="vidx" wx:key="vidx" wx:for-item="vd">
+                  <video
+                    class="trace-video"
+                    src="{{vd.url}}"
+                    poster="{{vd.poster}}"
+                    controls
+                    show-center-play-btn
+                  ></video>
+                  <view class="video-cap" wx:if="{{vd.title}}">{{vd.title}}</view>
+                </block>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 底部：资质与防伪 -->
+    <view class="footer-card" wx:if="{{footer}}">
+      <view class="footer-title">企业资质与保障</view>
+      <view class="footer-block">
+        <text class="footer-label">主体信息</text>
+        <text class="footer-text">{{footer.enterprise}}</text>
+      </view>
+      <view class="footer-block">
+        <text class="footer-label">正品保障</text>
+        <text class="footer-text">{{footer.guarantee}}</text>
+      </view>
+      <view class="footer-block">
+        <text class="footer-label">防伪说明</text>
+        <text class="footer-text">{{footer.antiFake}}</text>
+      </view>
+    </view>
+
+    <view class="page-pad-bottom"></view>
+  </block>
+</view>
+</page-background>

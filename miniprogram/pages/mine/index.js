@@ -1,3 +1,5 @@
+const traceWorkflowApi = require("../../utils/traceWorkflowApi");
+
 Page({
   data: {
     user: {
@@ -9,7 +11,8 @@ Page({
      * 菜单项：url 以 / 开头则 navigateTo（非 tab 页）。
      * 红色溯源相关入口带 badge 突出展示。
      */
-    menuList: [
+    menuList: [],
+    _menuBase: [
       { title: "红色溯源", url: "/pages/red-trace/hub/index", badge: "溯源" },
       { title: "研学打卡", url: "/pages/red-trace/study-checkin/index", badge: "卡" },
       { title: "电子证书", url: "/pages/red-trace/certificate/index", badge: "证", needCert: true },
@@ -18,9 +21,12 @@ Page({
       { title: "我的收藏", url: "" },
       { title: "收货地址", url: "" },
       { title: "客服中心", url: "" },
-      // 设置入口：进入登录/注册/完善资料（按你要求）
       { title: "设置", url: "/pages/auth/profile/index?redirect=tab:mine" }
     ]
+  },
+
+  onLoad() {
+    this.setData({ menuList: this.data._menuBase.slice() });
   },
 
   onShow() {
@@ -34,8 +40,25 @@ Page({
           avatarUrl: p.avatarUrl || ""
         }
       });
-      return;
     }
+    const base = this.data._menuBase;
+    traceWorkflowApi
+      .fetchPermission({ showError: false, needAuth: true })
+      .then((perm) => {
+        const ok = perm && (perm.isSuper || (perm.stages && perm.stages.length > 0));
+        let list = base.slice();
+        if (ok) {
+          const extra = [
+            { title: "溯源数据上报", url: "/pages/trace-report/index", badge: "溯" },
+            { title: "我的溯源上报", url: "/pages/trace-report/my", badge: "报" }
+          ];
+          list = list.slice(0, 3).concat(extra).concat(list.slice(3));
+        }
+        this.setData({ menuList: list });
+      })
+      .catch(() => {
+        this.setData({ menuList: base.slice() });
+      });
   },
 
   /** 点击头像卡片：进入登录/注册/完善资料 */

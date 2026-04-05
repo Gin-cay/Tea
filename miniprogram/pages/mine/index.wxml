@@ -24,6 +24,7 @@
     <view class="section-title">功能入口</view>
     <block wx:for="{{menuList}}" wx:key="title">
       <view
+        wx:if="{{item.title !== '数据说明' && item.title !== '云服务自检'}}"
         class="menu-item"
         bindtap="onMenuTap"
         data-url="{{item.url}}"

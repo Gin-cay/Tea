@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "茶叶全流程溯源",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "page-background": "/components/page-background/index"
+  }
+}

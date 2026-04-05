@@ -1,0 +1,193 @@
+/**
+ * 全流程溯源 · 模拟数据与接口约定
+ *
+ * === 后端 REST 建议（与下方 JSON 结构一致）===
+ * GET /api/trace/chain/{traceNo}
+ * - 无需登录（扫码公开查看）
+ * - traceNo：产品唯一溯源编号，与包装/二维码一致
+ *
+ * 响应体（200）：
+ * {
+ *   "traceNo": "string",
+ *   "product": { ... },
+ *   "nodes": [ ... ],
+ *   "footer": { ... }
+ * }
+ *
+ * 小程序码 scene 参数（≤32 字符）：建议 `t={traceNo}`，例如 t=XYMJ2026DEMO01
+ * 页面路径：pages/trace-chain/index
+ */
+
+const DEMO_PAYLOAD = {
+  traceNo: "XYMJ2026DEMO01",
+  product: {
+    traceNo: "XYMJ2026DEMO01",
+    name: "信阳毛尖 · 明前特级",
+    grade: "特级",
+    spec: "250g / 罐",
+    productionDate: "2026-04-02",
+    coverImage: "/images/banner-home.png",
+    brief: "浉河港核心产区，单芽采制，清汤绿叶。"
+  },
+  nodes: [
+    {
+      key: "garden",
+      title: "茶园信息",
+      time: "2026-03-01 08:00",
+      summary: "浉河港乡某高山茶园，酸性黄壤，云雾滋养。",
+      fields: [
+        { label: "产地", value: "河南省信阳市浉河区浉河港镇" },
+        { label: "海拔", value: "约 620m" },
+        { label: "土壤", value: "黄棕壤，pH 5.2～5.8，有机质丰富" },
+        { label: "茶园管理", value: "人工除草，有机肥为主，禁高毒农药" }
+      ],
+      images: ["/images/banner-home.png", "/images/background.png"],
+      videos: [],
+      subSteps: []
+    },
+    {
+      key: "picking",
+      title: "采摘监控",
+      time: "2026-03-28 06:30",
+      summary: "明前一芽一叶初展，竹篓盛装，2 小时内送厂。",
+      fields: [
+        { label: "采摘时间", value: "2026-03-28 06:20～10:30" },
+        { label: "采摘人员", value: "合作社持证采茶工 12 人（班组：春采一组）" },
+        { label: "采摘标准", value: "单芽至一芽一叶初展，匀整度≥90%" },
+        { label: "鲜叶状态", value: "鲜活、无红变、无机械伤" }
+      ],
+      images: ["/images/banner-mall.png"],
+      videos: [],
+      subSteps: []
+    },
+    {
+      key: "processing",
+      title: "加工监控",
+      time: "2026-03-28 11:00",
+      summary: "当日鲜叶当日加工，关键工序全程记录。",
+      fields: [{ label: "加工厂", value: "信阳某某茶业专业合作社 SC 认证车间" }],
+      images: ["/images/banner-home.png"],
+      /** 加工视频请换成本地或企业 CDN 可访问地址；演示默认留空避免无效外链 */
+      videos: [],
+      subSteps: [
+        {
+          name: "摊凉",
+          time: "2026-03-28 11:00～12:00",
+          operator: "李某",
+          remark: "薄摊通风，失水约 8%"
+        },
+        {
+          name: "杀青",
+          time: "2026-03-28 13:10～13:45",
+          operator: "王某",
+          remark: "锅温控温，杀透杀匀"
+        },
+        {
+          name: "揉捻",
+          time: "2026-03-28 14:00～14:35",
+          operator: "王某",
+          remark: "轻—重—轻，保毫保形"
+        },
+        {
+          name: "理条",
+          time: "2026-03-28 15:00～15:40",
+          operator: "赵某",
+          remark: "理直条紧，初固定型"
+        },
+        {
+          name: "烘干",
+          time: "2026-03-28 16:00～17:20",
+          operator: "赵某",
+          remark: "分次烘焙，含水率≤7%"
+        }
+      ]
+    },
+    {
+      key: "qc",
+      title: "质检监控",
+      time: "2026-03-29 09:15",
+      summary: "批检合格，农残未检出（方法检出限内）。",
+      fields: [
+        { label: "品质等级", value: "特级（企业标准 Q/XXX 2024）" },
+        { label: "质检人", value: "张某某（质检员证号示例）" },
+        { label: "质检时间", value: "2026-03-29 09:15" },
+        { label: "农残检测", value: "28 项农残未检出（报告编号 CMA-2026-XXXX）" }
+      ],
+      images: ["/images/background.png"],
+      videos: [],
+      subSteps: []
+    },
+    {
+      key: "warehouse",
+      title: "仓储监控",
+      time: "2026-03-29 14:00",
+      summary: "恒温除湿贮藏，离墙离地，先进先出。",
+      fields: [
+        { label: "入库时间", value: "2026-03-29 14:00" },
+        { label: "仓储环境", value: "清洁、避光、防异味" },
+        { label: "温湿度", value: "温度 5～10℃，相对湿度 ≤45%（24h 记录）" }
+      ],
+      images: [],
+      videos: [],
+      subSteps: []
+    },
+    {
+      key: "logistics",
+      title: "物流监控",
+      time: "2026-04-02 10:20",
+      summary: "顺丰揽收，全程可追踪。",
+      fields: [
+        { label: "发货时间", value: "2026-04-02 10:20" },
+        { label: "快递信息", value: "顺丰速运 SF1234567890xxx" },
+        {
+          label: "运输轨迹",
+          value: "信阳揽收 → 郑州中转 → 目的地派送中（示例）"
+        }
+      ],
+      images: [],
+      videos: [],
+      subSteps: []
+    },
+    {
+      key: "product",
+      title: "产品信息",
+      time: "2026-04-02",
+      summary: "本罐茶叶与上述批次、质检、仓储记录一一对应。",
+      fields: [
+        { label: "品名", value: "信阳毛尖（明前特级）" },
+        { label: "等级", value: "特级" },
+        { label: "规格", value: "250g / 罐" },
+        { label: "生产日期", value: "2026-04-02" },
+        { label: "唯一溯源编号", value: "XYMJ2026DEMO01" }
+      ],
+      images: ["/images/banner-mall.png"],
+      videos: [],
+      subSteps: []
+    }
+  ],
+  footer: {
+    enterprise: "信阳某某茶业专业合作社 · 食品生产许可证编号示例",
+    guarantee: "正品保障：一物一码，扫码信息与监管备案批次关联（演示数据）。",
+    antiFake:
+      "防伪说明：请通过微信扫一扫包装二维码进入官方小程序；若页面无法打开或非本小程序，请警惕假冒。"
+  }
+};
+
+/** @param {string} traceNo */
+function getMockTraceChain(traceNo) {
+  const id = (traceNo || "").trim() || DEMO_PAYLOAD.traceNo;
+  const copy = JSON.parse(JSON.stringify(DEMO_PAYLOAD));
+  copy.traceNo = id;
+  const prod = copy.nodes.find((n) => n.key === "product");
+  if (prod) {
+    const f = prod.fields.find((x) => x.label === "唯一溯源编号");
+    if (f) f.value = id;
+  }
+  copy.product.traceNo = id;
+  return copy;
+}
+
+module.exports = {
+  DEMO_PAYLOAD,
+  getMockTraceChain
+};

@@ -1,0 +1,63 @@
+.page {
+  padding: 24rpx;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+
+.row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.tag {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2f8f3a;
+}
+
+.audit {
+  font-size: 24rpx;
+}
+
+.audit-0 {
+  color: #c9a227;
+}
+
+.audit-1 {
+  color: #2f8f3a;
+}
+
+.audit-2 {
+  color: #c0392b;
+}
+
+.batch {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.sum {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.time {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+
+.muted {
+  text-align: center;
+  color: #888;
+  padding: 48rpx;
+}

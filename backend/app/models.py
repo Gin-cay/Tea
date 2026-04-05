@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime
 from typing import Any, List, Optional
 
-from sqlalchemy import Boolean, DateTime, Float, Integer, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -478,3 +478,73 @@ class UserTraceRecord(Base):
     garden_name: Mapped[str] = mapped_column(String(200), default="")
     order_mode: Mapped[str] = mapped_column(String(32), default="garden")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+
+
+# ---------- 溯源全流程上报 · 角色/批次/环节数据/留痕 ----------
+
+
+class TraceSysRole(Base):
+    """溯源角色与环节权限（permissions 为 JSON 数组，如 [\"picking\"]；[\"*\"] 为超级管理员）。"""
+
+    __tablename__ = "trace_sys_role"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    role_name: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+    permissions: Mapped[str] = mapped_column(Text, default="[]")
+    create_time: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class TraceUserRole(Base):
+    """小程序用户与溯源角色绑定（user_id 对应 users.id）。"""
+
+    __tablename__ = "trace_user_role"
+    __table_args__ = (UniqueConstraint("user_id", "role_id", name="uq_trace_user_role"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[str] = mapped_column(String(32), ForeignKey("users.id"), nullable=False, index=True)
+    role_id: Mapped[int] = mapped_column(Integer, ForeignKey("trace_sys_role.id"), nullable=False)
+    assign_time: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class TraceBatch(Base):
+    """产品溯源批次（batch_no 即消费者扫码的溯源编号）。"""
+
+    __tablename__ = "trace_batch"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    batch_no: Mapped[str] = mapped_column(String(64), unique=True, nullable=False, index=True)
+    product_name: Mapped[str] = mapped_column(String(200), default="信阳毛尖")
+    create_user: Mapped[str] = mapped_column(String(64), default="")
+    create_time: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    status: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class TraceData(Base):
+    """单批次单环节一条主记录（修改走 update 接口并写 trace_data_log）。"""
+
+    __tablename__ = "trace_data"
+    __table_args__ = (UniqueConstraint("batch_id", "process_type", name="uq_trace_data_batch_stage"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    batch_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    process_type: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    content: Mapped[str] = mapped_column(Text, default="{}")
+    submit_user_id: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    submit_time: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    audit_status: Mapped[int] = mapped_column(Integer, default=0)
+    audit_user: Mapped[str] = mapped_column(String(64), default="")
+    audit_time: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+
+
+class TraceDataLog(Base):
+    """环节数据修改留痕（逻辑删除禁止；仅追加日志）。"""
+
+    __tablename__ = "trace_data_log"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    data_id: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    before_content: Mapped[str] = mapped_column(Text, default="{}")
+    after_content: Mapped[str] = mapped_column(Text, default="{}")
+    update_user: Mapped[str] = mapped_column(String(32), nullable=False)
+    update_time: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    reason: Mapped[str] = mapped_column(String(500), default="")

@@ -1,0 +1,39 @@
+<page-background>
+<view class="page">
+  <view class="card">
+    <view class="label">溯源批次</view>
+    <view class="row">
+      <input class="input" placeholder="扫码或粘贴批次号" value="{{batchNo}}" bindinput="onBatchInput" />
+      <button class="btn-scan" size="mini" bindtap="onScan">扫码</button>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="label">上报环节（仅显示您有权限的环节）</view>
+    <picker mode="selector" range="{{stageLabels}}" value="{{stageIndex}}" bindchange="onStageChange">
+      <view class="picker-val">{{stageLabels[stageIndex] || '请选择'}}</view>
+    </picker>
+  </view>
+
+  <view class="card">
+    <view class="label">摘要说明</view>
+    <textarea class="area" placeholder="如：采摘时间、重量、人员等" value="{{summary}}" bindinput="onSummaryInput" />
+  </view>
+
+  <view class="card">
+    <view class="label">现场照片（选填，可多张）</view>
+    <view class="img-row">
+      <block wx:for="{{images}}" wx:key="*this">
+        <image class="thumb" src="{{item}}" mode="aspectFill" bindtap="onPreview" data-src="{{item}}" />
+      </block>
+      <view class="thumb add" bindtap="onChooseImage" wx:if="{{images.length < 6}}">+</view>
+    </view>
+  </view>
+
+  <view class="card muted" wx:if="{{locText}}">
+    <text>定位：{{locText}}</text>
+  </view>
+
+  <button class="submit" type="primary" bindtap="onSubmit" disabled="{{submitting}}">提交上报</button>
+</view>
+</page-background>

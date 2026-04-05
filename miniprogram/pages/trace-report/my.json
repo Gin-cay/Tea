@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "我的溯源上报",
+  "usingComponents": {
+    "page-background": "/components/page-background/index"
+  }
+}

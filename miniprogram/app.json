@@ -7,6 +7,7 @@
     "pages/red-trace/hub/index",
     "pages/red-trace/trace-code/index",
     "pages/red-trace/trace-view/index",
+    "pages/trace-chain/index",
     "pages/red-trace/story-rich/index",
     "pages/red-trace/certificate/index",
     "pages/public-benefit/milestone/index",
@@ -29,6 +30,8 @@
     "pages/adopt-detail/adopt-detail",
     "pages/adopt-order/adopt-order",
     "pages/mall/index",
+    "pages/trace-report/index",
+    "pages/trace-report/my",
     "pages/mine/index"
   ],
   "window": {

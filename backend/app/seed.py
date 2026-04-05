@@ -25,6 +25,7 @@ from app.models import (
     ShopProductTrace,
     StudyRoute,
     StudySpot,
+    TraceSysRole,
 )
 
 logger = logging.getLogger(__name__)
@@ -323,6 +324,25 @@ def _seed_core_bundle_if_empty(db: Session) -> None:
     logger.info("公益、认养、研学等种子数据写入完成")
 
 
+def seed_trace_roles_if_needed(db: Session) -> None:
+    """溯源角色（可扩展 permissions JSON 数组；[\"*\"] 为超级管理员）。"""
+    if db.query(TraceSysRole).first():
+        return
+    roles = [
+        ("溯源超级管理员", '["*"]'),
+        ("茶园管理员", '["picking"]'),
+        ("加工厂管理员", '["processing"]'),
+        ("质检管理员", '["qc"]'),
+        ("仓库管理员", '["warehouse", "logistics"]'),
+        ("销售运营管理员", '["sales"]'),
+    ]
+    for name, perms in roles:
+        db.add(TraceSysRole(role_name=name, permissions=perms))
+    db.commit()
+    logger.info("溯源角色种子数据已写入")
+
+
 def run_seed(db: Session) -> None:
     _seed_core_bundle_if_empty(db)
     seed_shop_content_if_needed(db)
+    seed_trace_roles_if_needed(db)
